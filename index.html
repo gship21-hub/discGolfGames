@@ -1,0 +1,330 @@
+<!-- MarioPartyDiscGolf.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mario Party Disc Golf</title>
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: Arial, sans-serif; }
+
+body {
+    background-image: url("https://preview.redd.it/cant-wait-to-give-this-one-a-spin-v0-7q76nf0tk5s81.png?width=640&crop=smart&auto=webp&s=004e89b4253605e45c521df3634bbad8ba73d793");
+    background-size: calc(100vw / 3) calc(100vh / 6);
+    background-repeat: repeat;
+    background-position: top left;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    padding: 10px;
+    text-align: center;
+}
+
+.hidden { display: none !important; }
+
+.wheel-container {
+    position: relative;
+    width: 100%;
+    max-width: 360px;
+}
+
+canvas {
+    width: 100%;
+    height: auto;
+    background: black;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    will-change: transform;
+}
+
+.pointer {
+    width: 0;
+    height: 0;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-bottom: 25px solid #333;
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    transform: translateX(-50%) rotate(180deg);
+    z-index: 10;
+}
+
+#result, #holeCounter {
+    margin-top: 15px;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 10px;
+    background: white;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 360px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
+
+.result-team { display: flex; justify-content: space-between; align-items: center; margin: 5px 0; }
+.result-team span { flex: 1; text-align: left; }
+
+.team-controls { display: flex; align-items: center; justify-content: center; gap: 8px; }
+.team-controls button {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: black;
+    color: white;
+    font-size: 18px;
+    border: none;
+    cursor: pointer;
+}
+
+.team-counter {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 18px;
+    background: #f0f0f0;
+    border-radius: 50%;
+}
+
+.main-button {
+    width: 100%;
+    max-width: 360px;
+    margin-top: 10px;
+    padding: 14px;
+    font-size: 18px;
+    font-weight: bold;
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.1s ease, background 0.2s ease;
+}
+
+.main-button:hover { background-color: #222; }
+.main-button:active { transform: scale(0.97); }
+
+#scoreboard, .name-list { background: white; padding: 10px; border-radius: 8px; box-shadow: 0 0 5px rgba(0,0,0,0.1); width: 100%; max-width: 360px; margin-bottom: 15px; }
+.name-list .list-header { text-align: center; font-size: 20px; font-weight: bold; margin-bottom: 10px; }
+.name-list label { display: flex; align-items: center; gap: 10px; padding: 5px 0; font-size: 18px; }
+
+.add-name-box { display: flex; gap: 5px; margin-top: 10px; }
+.add-name-box input { flex: 1; padding: 10px; font-size: 16px; }
+</style>
+</head>
+
+<body>
+
+<div id="scoreboard" class="hidden">
+    <h2>Scoreboard</h2>
+    <div id="playersScores"></div>
+</div>
+
+<div id="selectPage">
+    <div class="name-list" id="nameList">
+        <div class="list-header">Select Players</div>
+    </div>
+    <div class="add-name-box">
+        <input type="text" id="newName" placeholder="Add new player name">
+        <button class="main-button" onclick="addName()">Add</button>
+    </div>
+    <button class="main-button" onclick="startGame()">Start Game</button>
+</div>
+
+<div id="wheelPage" class="hidden">
+    <div class="wheel-container">
+        <div class="pointer"></div>
+        <canvas id="wheel" width="600" height="600"></canvas>
+    </div>
+    <button class="main-button" onclick="spinWheel()">🎯 Spin</button>
+    <div id="holeCounter" class="hidden">Hole 1:</div>
+    <div id="result" class="hidden"></div>
+</div>
+
+<script>
+const defaultNames = ["Grant","Caleb","Will","Chris","Evan","Aiden","James","Jake"];
+let names = JSON.parse(localStorage.getItem("teamRouletteNames")) || defaultNames;
+let selectedPlayers = [];
+let teamPartitions = [];
+let playerScores = {};
+let holeNumber = 0;
+
+const nameListDiv = document.getElementById("nameList");
+
+function saveNames() { localStorage.setItem("teamRouletteNames", JSON.stringify(names)); }
+
+function renderNameList() {
+    nameListDiv.innerHTML = `<div class="list-header">Select Players</div>`;
+    names.forEach(name => {
+        nameListDiv.innerHTML += `<label><input type="checkbox" value="${name}"> ${name}</label>`;
+    });
+}
+renderNameList();
+
+function addName() {
+    const input = document.getElementById("newName");
+    const name = input.value.trim();
+    if (!name) return;
+    if (!names.includes(name)) { names.push(name); saveNames(); renderNameList(); input.value = ""; }
+    else { alert("Name already exists"); }
+}
+
+function formatTeam(team) {
+    if (team.length === 1) return team[0];
+    if (team.length === 2) return team.join(" and ");
+    return team.slice(0,-1).join(", ") + ", and " + team[team.length-1];
+}
+
+function generateUniquePartitions(arr) {
+    let result = [];
+    function helper(remaining, teams) {
+        if (remaining.length === 0) { result.push(teams.map(t => t.slice())); return; }
+        let first = remaining[0];
+        for (let i=0;i<teams.length;i++) { teams[i].push(first); helper(remaining.slice(1),teams); teams[i].pop(); }
+        teams.push([first]); helper(remaining.slice(1),teams); teams.pop();
+    }
+    helper(arr, []);
+    let unique = new Set();
+    let cleaned = [];
+    result.forEach(part => {
+        let normalized = part.map(team => team.slice().sort());
+        normalized.sort((a,b)=>{if(a.length!==b.length) return a.length-b.length; return a.join(",").localeCompare(b.join(","))});
+        let key = JSON.stringify(normalized);
+        if(!unique.has(key)) { unique.add(key); cleaned.push(normalized); }
+    });
+    return cleaned;
+}
+
+const canvas = document.getElementById("wheel");
+const ctx = canvas.getContext("2d");
+const center = canvas.width/2;
+const radius = center-10;
+let currentRotation = 0;
+
+function startGame() {
+    selectedPlayers = [];
+    document.querySelectorAll("#nameList input:checked").forEach(cb => selectedPlayers.push(cb.value));
+    if(selectedPlayers.length<2){ alert("Select at least 2 players"); return; }
+    teamPartitions = generateUniquePartitions(selectedPlayers)
+        .filter(p => p.length>1)
+        .map(p => p.map(team => formatTeam(team)).join("  vs  "));
+    drawWheel();
+    document.getElementById("selectPage").classList.add("hidden");
+    document.getElementById("wheelPage").classList.remove("hidden");
+}
+
+function drawWheel() {
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    const slice = 2*Math.PI/teamPartitions.length;
+    const rainbowColors = ["#FF0000","#FF7F00","#FFFF00","#00FF00","#0000FF","#4B0082","#8F00FF","#FF69B4"];
+    for(let i=0;i<teamPartitions.length;i++){
+        ctx.beginPath();
+        ctx.moveTo(center,center);
+        ctx.arc(center,center,radius,i*slice,(i+1)*slice);
+        ctx.fillStyle = rainbowColors[i%rainbowColors.length];
+        ctx.fill();
+        // text
+        ctx.save();
+        ctx.translate(center,center);
+        ctx.rotate(i*slice + slice/2);
+        ctx.fillStyle="white";
+        ctx.font="14px Arial";
+        ctx.textAlign="left";
+        ctx.textBaseline="middle";
+        ctx.fillText(teamPartitions[i], radius/3, 0);
+        ctx.restore();
+    }
+}
+
+function spinWheel() {
+    holeNumber++;
+    const holeDiv = document.getElementById("holeCounter");
+    holeDiv.innerText = "Hole " + holeNumber + ":";
+    holeDiv.classList.remove("hidden");
+	
+    const index = Math.floor(Math.random()*teamPartitions.length);
+    const sliceDeg = 360/teamPartitions.length;
+    const rotation = 360*5 + index * sliceDeg;
+    currentRotation += rotation;
+
+    // Safari fix: force reflow for transition
+    canvas.style.transition = "none";
+    canvas.offsetHeight;
+    canvas.style.transition = "transform 4s ease-out";
+    canvas.style.transform = `rotate(${currentRotation}deg)`;
+
+    setTimeout(()=>{
+        const resultDiv = document.getElementById("result");
+        const teams = teamPartitions[index].split("  vs  ").map(teamStr => {
+			return teamStr
+				.replace(", and ", ", ")
+				.replace(" and ", ", ")
+				.split(", ")
+				.map(name => name.trim());
+		});
+        resultDiv.innerHTML="";
+        teams.forEach((team,i)=>{
+            const div = document.createElement("div");
+            div.className="result-team";
+            const span = document.createElement("span");
+            span.innerText="Team "+(i+1)+": "+team.join(" and ");
+            const controls = document.createElement("div");
+            controls.className="team-controls";
+            const counter = document.createElement("span");
+            counter.className="team-counter"; counter.innerText = "0";
+            const minusBtn = document.createElement("button"); minusBtn.innerText="➖";
+            const plusBtn = document.createElement("button"); plusBtn.innerText="➕";
+
+            minusBtn.onclick = () => {
+                let val = parseInt(counter.innerText);
+                if (val > 0) {
+                    counter.innerText = val - 1;
+                    team.forEach(player => { if(playerScores[player]>0) playerScores[player]--; });
+                    renderScoreboard();
+                }
+            };
+
+            plusBtn.onclick = () => {
+                let val = parseInt(counter.innerText);
+                counter.innerText = val + 1;
+                team.forEach(player => { playerScores[player]=(playerScores[player]||0)+1; });
+                renderScoreboard();
+            };
+
+            controls.appendChild(minusBtn); controls.appendChild(counter); controls.appendChild(plusBtn);
+            div.appendChild(span); div.appendChild(controls);
+            resultDiv.appendChild(div);
+        });
+        resultDiv.classList.remove("hidden");
+        initScoreboard();
+    },4000);
+}
+
+function initScoreboard() {
+    selectedPlayers.forEach(p => { if(!(p in playerScores)) playerScores[p]=0; });
+    renderScoreboard();
+}
+
+function renderScoreboard() {
+    const container = document.getElementById("playersScores");
+    container.innerHTML="";
+    selectedPlayers.forEach(player=>{
+        const row = document.createElement("div");
+        row.className="player-row";
+        row.innerText=player+": "+playerScores[player];
+        container.appendChild(row);
+    });
+    document.getElementById("scoreboard").classList.remove("hidden");
+}
+
+window.onbeforeunload = function(e) {
+    return "Are you sure you want to leave? Your scores will be lost.";
+};
+</script>
+</body>
+</html>
