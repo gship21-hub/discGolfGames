@@ -17,7 +17,10 @@ body {
     color: #f5f7fb;
     display: flex;
     justify-content: center;
-    padding: 20px;
+    padding: clamp(10px, 3vw, 20px);
+    padding-top: max(clamp(10px, 3vw, 20px), env(safe-area-inset-top));
+    padding-bottom: max(clamp(10px, 3vw, 20px), env(safe-area-inset-bottom));
+    overflow-x: hidden;
 }
 .container {
     width: min(100%, 960px);
@@ -58,18 +61,39 @@ body {
     color: white;
     cursor: pointer;
     font-size: 1rem;
+    min-height: 44px;
+    touch-action: manipulation;
     transition: transform .12s ease, box-shadow .12s ease, background .2s ease;
 }
 .button:hover, .main-button:hover { transform: translateY(-1px); box-shadow: 0 10px 22px rgba(0,0,0,0.18); }
 .button:active, .main-button:active { transform: scale(0.98); }
-.input, select {
+.input, select, textarea {
     width: 100%;
     border-radius: 12px;
     border: 1px solid rgba(255,255,255,0.16);
     background: rgba(255,255,255,0.08);
     color: #eef2ff;
     padding: 12px 14px;
-    font-size: 1rem;
+    font-size: 16px;
+    min-height: 44px;
+}
+select {
+    color: #000000 !important;
+    background: #ffffff !important;
+}
+select option {
+    color: #000000 !important;
+    background: #ffffff !important;
+    padding: 4px 8px;
+}
+select option:hover,
+select option:focus {
+    background: #e0e0e0 !important;
+    color: #000000 !important;
+}
+select option:checked {
+    background: #1f8cff !important;
+    color: #ffffff !important;
 }
 .input::placeholder { color: rgba(255,255,255,0.65); }
 .panel {
@@ -119,6 +143,9 @@ body {
 }
 canvas {
     width: 100%;
+    max-width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
     border-radius: 50%;
     box-shadow: 0 18px 40px rgba(0,0,0,0.33);
     background: #111b2f;
@@ -141,7 +168,44 @@ canvas {
     align-items: center;
     gap: 12px;
 }
+.header-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
 .panel-header button { flex-shrink: 0; }
+.theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.95rem;
+    color: #d7e1f1;
+    white-space: nowrap;
+    user-select: none;
+}
+.theme-toggle input {
+    width: 18px;
+    height: 18px;
+    accent-color: #4080ff;
+    cursor: pointer;
+}
+.game-select-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+.game-option-card {
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 16px;
+    padding: 16px;
+    background: rgba(255,255,255,0.05);
+}
+.game-option-card h3 {
+    margin: 0 0 8px;
+}
+.game-option-card p {
+    margin-bottom: 12px;
+}
 #result, #holeCounter, #historyPanel, #scoreboard {
     margin-top: 14px;
 }
@@ -240,67 +304,175 @@ canvas {
     background: rgba(255,255,255,0.05);
     margin-bottom: 10px;
 }
-.course-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; }
-.course-card { border: 1px solid rgba(255,255,255,0.12); border-radius: 14px; padding: 14px; background: rgba(255,255,255,0.05); }
-.course-card h4 { margin: 0 0 8px; }
-.course-card p, .course-card li { margin: 0 0 8px; }
-.course-results { display: grid; gap: 10px; margin-top: 10px; }
-.course-result-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-radius: 12px; background: rgba(255,255,255,0.04); }
-.course-result-item button { margin-left: 10px; }
 .small-text { color: #cfd8ff; font-size: 0.95rem; }
+body.light-mode {
+    color-scheme: light;
+    background: linear-gradient(180deg, #edf3fb 0%, #dfe8f5 100%);
+    color: #1e2a38;
+}
+body.light-mode .page-panel {
+    background: rgba(255,255,255,0.88);
+    border: 1px solid rgba(32,53,84,0.15);
+    box-shadow: 0 20px 60px rgba(30,50,77,0.12);
+}
+body.light-mode .page-panel p {
+    color: #314760;
+}
+body.light-mode .banner {
+    background: linear-gradient(135deg, rgba(69,129,255,0.14), rgba(255,255,255,0.7));
+}
+body.light-mode .panel,
+body.light-mode .card,
+body.light-mode .team-card,
+body.light-mode .stats .metric,
+body.light-mode .name-list label,
+body.light-mode .course-card,
+body.light-mode .course-result-item,
+body.light-mode #historyPanel li,
+body.light-mode .team-counter,
+body.light-mode .team-player-item {
+    background: rgba(255,255,255,0.92);
+    border-color: rgba(32,53,84,0.12);
+    color: #1e2a38;
+}
+body.light-mode .team-card-header,
+body.light-mode .score-name,
+body.light-mode .small-text,
+body.light-mode .team-card-subtitle,
+body.light-mode p.small-text {
+    color: #243a57;
+}
+body.light-mode .input {
+    background: #ffffff;
+    border-color: rgba(32,53,84,0.25);
+    color: #1e2a38;
+}
+body.light-mode .input::placeholder {
+    color: #5a728e;
+}
+body.light-mode canvas {
+    background: #f5f8fd;
+}
+body.light-mode .pointer {
+    border-bottom-color: #1e2a38;
+}
+body.light-mode #playersScores .score-row {
+    border-bottom-color: rgba(32,53,84,0.15);
+}
+body.light-mode .theme-toggle {
+    color: #243a57;
+}
+body.light-mode .game-option-card {
+    background: rgba(255,255,255,0.94);
+    border-color: rgba(32,53,84,0.16);
+}
 @media (max-width: 720px) {
     .grid-2 { grid-template-columns: 1fr; }
+    .game-select-grid { grid-template-columns: 1fr; }
+    .container { width: 100%; }
+    .page-panel { padding: 14px; border-radius: 14px; }
+    .panel { padding: 12px; border-radius: 12px; }
+    .panel-header { flex-direction: column; align-items: stretch; gap: 10px; }
+    .header-controls { width: 100%; flex-wrap: wrap; gap: 8px; }
+    .header-controls .theme-toggle { width: 100%; }
+    .header-controls .button,
+    .header-controls .main-button { flex: 1 1 calc(50% - 4px); }
+    .button-row { gap: 8px; }
+    .button-row .button,
+    .button-row .main-button,
+    .course-actions .button,
+    .course-actions .main-button { flex: 1 1 100%; width: 100%; }
+    .team-cards { gap: 10px; }
+    .team-card { min-width: 0; width: 100%; padding: 12px; }
+    .team-controls button { width: 44px; height: 44px; }
+    .team-counter { min-width: 52px; }
+    .pointer {
+        border-left-width: 14px;
+        border-right-width: 14px;
+        border-bottom-width: 22px;
+    }
+    #playersScores .score-row { padding: 12px 0; }
 }
-#teamSizePanel { display: none !important; }
+
+@media (max-width: 520px) {
+    body { padding: 10px; }
+    .page-panel h1 { font-size: 1.55rem; }
+    .page-panel h2 { font-size: 1.25rem; }
+    .page-panel h3 { font-size: 1.05rem; }
+    .page-panel p { line-height: 1.45; }
+    .header-controls .button,
+    .header-controls .main-button { flex: 1 1 100%; }
+    .theme-toggle { font-size: 0.92rem; }
+    #result, #holeCounter, #historyPanel, #scoreboard { margin-top: 10px; }
+}
 </style>
 </head>
 <body>
 <div class="container">
-    <section class="page-panel banner">
+    <section id="hubBanner" class="page-panel banner">
         <h1>Disc Golf Game Hub</h1>
         <p>Base your app on the current spinner logic, then add player setup, team modes, hole history, and score tracking. Use the controls below to configure your group and start the game.</p>
     </section>
-    <section id="setupPage" class="page-panel">
+    <section id="gameSelectPage" class="page-panel">
+        <div class="panel-header">
+            <div>
+                <h2>Select A Game</h2>
+                <p>Pick a game mode to continue into its setup screen.</p>
+            </div>
+            <label class="theme-toggle">
+                <input id="selectThemeToggle" type="checkbox" onchange="onThemeToggle(this.checked)">
+                Light mode
+            </label>
+        </div>
+        <div class="game-select-grid" style="margin-top:14px;">
+            <div class="game-option-card">
+                <h3>Mario Party</h3>
+                <p>Full party game setup with wheel spins, hole tracking, and scoreboard.</p>
+                <button class="main-button" onclick="chooseGame('mario-party')">Play Mario Party</button>
+            </div>
+            <div class="game-option-card">
+                <h3>Random Tee Box</h3>
+                <p>Jump into setup with tee boxes enabled and ready for randomized tee assignment.</p>
+                <button class="main-button" onclick="chooseGame('random-tee-box')">Play Random Tee Box</button>
+            </div>
+        </div>
+    </section>
+    <section id="setupPage" class="page-panel hidden">
         <div class="panel-header">
             <div>
                 <h2>Game Setup</h2>
-                <p>Choose players and a mode, then hit start.</p>
+                <p id="setupGameSummary">Choose players, then hit start.</p>
             </div>
-            <button class="button" onclick="loadSavedState()">Restore Last Game</button>
+            <div class="header-controls">
+                <label class="theme-toggle">
+                    <input id="setupThemeToggle" type="checkbox" onchange="onThemeToggle(this.checked)">
+                    Light mode
+                </label>
+                <button class="button" onclick="goToGameSelect()">Back to Game Select</button>
+                <button class="button" onclick="loadSavedState()">Restore Last Game</button>
+            </div>
         </div>
+        <label id="playersToggleRow" style="display:flex; align-items:center; gap:10px; margin:6px 0 12px;">
+            <input id="enableAddPlayers" type="checkbox" onchange="togglePlayersPanel()">
+            Show players box
+        </label>
         <div class="grid grid-2">
-            <div class="panel">
+            <div id="playersPanel" class="panel">
                 <h3>Players</h3>
                 <div class="name-list" id="nameList"></div>
-                <div class="add-name-box" style="display:flex; gap:8px; margin-top:12px;">
+                <div id="addPlayerEntryPanel" class="add-name-box" style="display:flex; gap:8px; margin-top:12px;">
                     <input id="newName" class="input" type="text" placeholder="Add new player">
-                    <button class="button" onclick="addName()">Add</button>
+                    <button id="addPlayerButton" class="button" onclick="addName()">Add</button>
                 </div>
             </div>
             <div class="panel">
-                <h3>Mode</h3>
-                <select id="gameMode" class="input" onchange="updateModeInfo()">
-                    <option value="team">Team Roulette</option>
-                    <option value="order">Player Order</option>
-                </select>
-                <div class="stats" style="margin-top:12px;">
-                    <div class="metric"><strong>Players picked</strong><span id="playerCount">0</span></div>
-                    <div class="metric"><strong>Wheel entries</strong><span id="entryCount">0</span></div>
-                </div>
-                <div id="teamSizePanel" style="margin-top:14px;">
-                    <label for="teamSize">Team size</label>
-                    <select id="teamSize" class="input" onchange="updateEntryCount()">
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                    </select>
-                </div>
-                <div id="teeBoxPanel" style="margin-top:14px;">
+                <div id="teeBoxPanel">
                     <h3>Tee Box Add-on</h3>
-                    <label style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+                    <label id="teeBoxToggleRow" style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
                         <input id="enableTeeBoxes" type="checkbox" onchange="toggleTeeBoxInputs()">
                         Enable random tee boxes
                     </label>
+                    <p id="teeBoxAlwaysOnNote" class="small-text hidden" style="margin-bottom:10px;">Random tee boxes are always enabled for this game.</p>
                     <div id="teeBoxEntryPanel" class="add-name-box" style="display:none; gap:8px; margin-bottom:10px;">
                         <input id="newTeeBox" class="input" type="text" placeholder="Add new tee box" disabled>
                         <button class="button" id="addTeeBoxButton" onclick="addTeeBox()" disabled>Add</button>
@@ -310,29 +482,22 @@ canvas {
                 </div>
             </div>
         </div>
-        <div class="panel">
-            <h3>Course Lookup</h3>
-            <div class="course-actions">
-                <button class="button" onclick="findNearbyCourses()">Find nearby courses</button>
-                <button class="button" onclick="clearCourseSelection()">Clear selected course</button>
+        <label id="courseToggleRow" style="display:flex; align-items:center; gap:10px; margin:6px 0 12px;">
+            <input id="enableCourseSelector" type="checkbox" onchange="toggleCoursePanel()">
+            Show course selector
+        </label>
+        <div id="courseSelectorPanel" class="panel">
+            <h3>Course Selector</h3>
+            <p>Select a built-in course, then choose a layout for that course.</p>
+            <select id="courseSelect" class="input" onchange="selectBuiltInCourse(this.value)">
+                <option value="">Choose a built-in course</option>
+            </select>
+            <div id="courseLayoutContainer" class="hidden" style="margin-top:10px;">
+                <select id="courseLayoutSelect" class="input" onchange="selectCourseLayout(this.value)">
+                    <option value="">Choose a layout</option>
+                </select>
             </div>
-            <p id="courseStatus" class="small-text">Use your phone's location to find nearby disc golf courses. Allow location access when prompted. If geolocation is blocked, enter an address or coordinates.</p>
-            <input id="manualCoordinates" class="input" type="text" placeholder="Address or lat,lon (e.g. 123 Main St or 39.41427, -77.41054)" style="margin-top:10px;">
-            <button class="button" onclick="searchCoursesByCoords()" style="margin-top:10px;">Search by address or coordinates</button>
-            <div id="courseResults" class="course-results"></div>
-            <div id="courseDetails" class="course-card hidden">
-                <h4>Selected Course</h4>
-                <p id="selectedCourseName"></p>
-                <p id="selectedCoursePar"></p>
-                <p id="selectedHolePars"></p>
-            </div>
-            <div id="manualCoursePanel" class="course-card" style="margin-top:12px;">
-                <h4>Manual Course Entry</h4>
-                <input id="manualCourseName" class="input" placeholder="Course name">
-                <input id="manualCoursePar" class="input" type="number" min="1" placeholder="Course par" style="margin-top:10px;">
-                <textarea id="manualHolePars" class="input" rows="3" placeholder="Hole pars comma separated, e.g. 3,4,3,5" style="margin-top:10px;"></textarea>
-                <button class="button" onclick="saveManualCourse()" style="margin-top:10px;">Save Manual Course</button>
-            </div>
+            <p id="courseSummary" class="small-text" style="margin-top:10px;">No course selected yet.</p>
         </div>
         <div class="button-row" style="margin-top:18px;">
             <button class="main-button" onclick="startGame()">Start Game</button>
@@ -345,7 +510,14 @@ canvas {
                 <h2>Spin Wheel</h2>
                 <p>Spin to select the next matchup or player order.</p>
             </div>
-            <button class="button" onclick="resetToSetup()">Back to Setup</button>
+            <div class="header-controls">
+                <label class="theme-toggle">
+                    <input id="wheelThemeToggle" type="checkbox" onchange="onThemeToggle(this.checked)">
+                    Light mode
+                </label>
+                <button class="button" onclick="resetToSetup()">Back to Setup</button>
+                <button class="button" onclick="resetGame()">Reset Scores</button>
+            </div>
         </div>
         <div class="wheel-container">
             <div class="pointer"></div>
@@ -353,7 +525,6 @@ canvas {
         </div>
         <div class="button-row" style="margin-top:18px;">
             <button class="main-button" onclick="spinWheel()">🎯 Spin</button>
-            <button class="button" onclick="resetGame()">Reset Scores</button>
         </div>
         <div id="holeCounter" class="card hidden"></div>
         <div id="result" class="card hidden"></div>
@@ -369,30 +540,262 @@ canvas {
 </div>
 <script>
 const defaultNames = ["Grant","Caleb","Will","Chris","Evan","Aiden","James","Jake"];
+
+const builtInCourses = [
+    {
+        id: 'heritage-farm-park',
+        name: 'Heritage Farm Park',
+        layouts: [
+            {
+                id: 'red-short',
+                name: 'Red/Short Layout',
+                color: '#FF4444',
+                holePars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+                coursePar: 60,
+                notes: '20-hole Red/Short Layout'
+            },
+            {
+                id: 'blue-long',
+                name: 'Blue/Long Layout',
+                color: '#4444FF',
+                holePars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 5, 4],
+                coursePar: 64,
+                notes: '20-hole blue long layout'
+            }
+        ]
+    },
+    {
+        id: 'woodsboro-regional-park',
+        name: 'Woodsboro Regional Park',
+        layouts: [
+            {
+                id: 'red-yellow-18',
+                name: 'Red to Yellow 18 Hole Layout',
+                color: '#FF6B1A',
+                holePars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,],
+                coursePar: 54,
+                notes: '18-hole Red to Yellow Layout'
+            },
+            {
+                id: 'red-white-18',
+                name: 'Red to White 18 Hole Layout',
+                color: '#FF4444',
+                holePars: [3, 3, 3, 3, 3, 3, 3, 3, 3,
+                           4, 4, 3, 3, 3, 3, 3, 3, 3],
+                coursePar: 56,
+                notes: '18-hole Red to White Layout'
+            },
+            {
+                id: 'blue-yellow-18',
+                name: 'Blue to Yellow 18  Hole Layout',
+                color: '#4444FF',
+                holePars: [3, 3, 3, 3, 4, 3, 3, 3, 3,
+                           3, 3, 3, 3, 3, 3, 3, 3, 3],
+                coursePar: 55,
+                notes: '18-hole Blue to Yellow Layout'
+            },
+            {
+                id: 'blue-yellow-20',
+                name: 'Blue to Yellow 20 Hole Layout',
+                color: '#4444FF',
+                holePars: [3, 3, 3, 3, 4, 3, 3, 3, 3,
+                           3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+                coursePar: 61,
+                notes: '20-hole Blue to Yellow Layout'
+            },
+        ]
+    },
+        {
+        id: 'riverwalk-park',
+        name: 'Riverwalk Park',
+        layouts: [
+            {
+                id: 'red-short',
+                name: 'Red/Short Layout',
+                color: '#FF4444',
+                holePars: [3, 3, 3, 3, 3, 3, 3, 3, 3,
+                           3, 3, 3, 3, 3, 3, 3, 3, 3],
+                coursePar: 54,
+                notes: '18-hole Red/Short Layout'
+            },
+            {
+                id: 'green-long',
+                name: 'Green/Long Layout',
+                color: '#44FF44',
+                holePars: [3, 3, 3, 3, 3, 3, 3, 3, 3,
+                           3, 3, 3, 3, 3, 3, 3, 3, 3],
+                coursePar: 54,
+                notes: '18-hole Green/Long Layout'
+            }
+        ]
+    },
+    {
+        id: 'krimgold-park',
+        name: 'Krimgold Park',
+        layouts: [
+            {
+                id: 'red-short',
+                name: 'Red/Short Layout',
+                color: '#FF4444',
+                holePars: [3, 3, 3, 3, 3, 3, 3, 3, 3,
+                            3, 3, 3, 3, 3, 3, 3, 3, 3],
+                coursePar: 54,
+                notes: '18-hole Red/Short Layout'
+            },
+            {
+                id: 'blue-long',
+                name: 'Blue/Long Layout',
+                color: '#4444FF',
+                holePars: [3, 3, 3, 3, 3, 3, 3, 3, 3,
+                            3, 3, 3, 3, 3, 3, 3, 3, 3],
+                coursePar: 54,
+                notes: '18-hole Blue/Long Layout'
+            }
+        ]
+    },
+        {
+        id: 'leister-park',
+        name: 'Leister Park',
+        layouts: [
+            {
+                id: 'red-short',
+                name: 'Red/Short Layout',
+                color: '#FF4444',
+                holePars: [3, 3, 3, 3, 3, 3, 3, 3, 3,
+                            3, 3, 3, 3, 3, 3, 3, 3, 3],
+                coursePar: 54,
+                notes: '18-hole Red/Short Layout'
+            }
+        ]
+    },
+        {
+        id: 'mckeldin-state-park',
+        name: 'McKeldin State Park',
+        layouts: [
+            {
+                id: 'red-short',
+                name: 'Red/Short Layout',
+                color: '#FF4444',
+                holePars: [3, 3, 3, 3, 3, 3, 3, 3, 3,
+                            3, 3, 3, 3, 3, 3, 3, 3, 3],
+                coursePar: 54,
+                notes: '18-hole Red/Short Layout'
+            },
+            {
+                id: 'blue-short',
+                name: 'Blue/Short Layout',
+                color: '#4444FF',
+                holePars: [3, 3, 3, 3, 3, 3, 3, 3, 3,
+                            3, 3, 3, 3, 3, 3, 3, 3, 3],
+                coursePar: 54,
+                notes: '18-hole Blue/Short Layout'
+            },
+            {
+                id: 'red-long',
+                name: 'Red/Long Layout',
+                color: '#FF4444',
+                holePars: [4, 3, 3, 3, 3, 3, 4, 3, 3,
+                            3, 3, 3, 4, 3, 3, 4, 4, 4],
+                coursePar: 60,
+                notes: '18-hole Red/Long Layout'
+            },
+            {
+                id: 'blue-long',
+                name: 'Blue/Long Layout',
+                color: '#4444FF',
+                holePars: [4, 3, 4, 4, 4, 3, 5, 4, 4,
+                            4, 4, 3, 4, 3, 3, 4, 4, 4],
+                coursePar: 68,
+                notes: '18-hole Blue/Long Layout'
+            },
+            {
+                id: 'super-short',
+                name: 'SuperShort Layout',
+                color: '#FF8844',
+                holePars: [3, 3, 3, 3, 3, 3, 3, 3, 3,
+                            3, 3, 3, 3, 3, 3, 3, 3, 3],
+                coursePar: 54,
+                notes: '18-hole SuperShort Layout'
+            },
+        ]
+    },
+    {
+        id: 'rockburn-branch',
+        name: 'Rockburn Branch',
+        layouts: [
+            {
+                id: 'long-red', 
+                name: 'Long to Red Layout',
+                color: '#FF4444',
+                holePars: [3, 3, 3, 3, 4, 3, 3, 3, 3,
+                            3, 3, 3, 3, 3, 4, 3, 3, 3],
+                coursePar: 55,
+                notes: '18-hole Long to Red Layout'
+            },
+            {
+                id: 'long-white',
+                name: 'Long to White Layout',
+                color: '#CCCCCC',
+                holePars: [4, 3, 4, 3, 4, 3, 3, 3, 3,
+                            3, 3, 3, 3, 3, 4, 3, 3, 3],
+                coursePar: 58,
+                notes: '18-hole Long to White Layout'
+            }
+        ]
+    },
+        {
+        id: 'emmitsburg-dgc',
+        name: 'Emmitsburg DGC',
+        layouts: [
+            {
+                id: 'long-blue', 
+                name: 'Blue/Long Layout',
+                color: '#4444FF',
+                holePars: [3, 4, 3, 3, 3, 3, 3, 3, 3,
+                            4, 3, 3, 3, 3, 3, 4, 3, 5],
+                coursePar: 59,
+                notes: '18-hole Blue/Long Layout'
+            },
+            {
+                id: 'short-red',
+                name: 'Red/Short Layout',
+                color: '#FF4444',
+                holePars: [3, 3, 3, 3, 3, 3, 3, 3, 3,
+                            3, 3, 3, 3, 3, 3, 3, 3, 3],
+                coursePar: 54,
+                notes: '18-hole Red/Short Layout'
+            }
+        ]
+    },
+];
+
 const NAMES_KEY = 'discGolfPlayers';
 const STATE_KEY = 'discGolfGameState';
+const THEME_KEY = 'discGolfThemeMode';
+const DEFAULT_RANDOM_TEE_BOXES = [];
 let names = JSON.parse(localStorage.getItem(NAMES_KEY)) || defaultNames;
 let state = {
+    selectedGame: '',
+    addPlayersEnabled: false,
+    showCourseSelectorEnabled: false,
     gameMode: 'team',
-    teamSize: 2,
     selectedPlayers: [],
     wheelEntries: [],
     holeNumber: 0,
     playerScores: {},
     teeBoxesEnabled: false,
     teeBoxes: [],
+    courseId: '',
     courseName: '',
+    layoutId: '',
+    layoutName: '',
     coursePar: null,
     holePars: [],
+    playerParDeltas: {},
     history: [],
     soloPlayerCounts: {}
 };
 const nameListDiv = document.getElementById('nameList');
-const playerCountEl = document.getElementById('playerCount');
-const entryCountEl = document.getElementById('entryCount');
-const teamSizePanel = document.getElementById('teamSizePanel');
-const gameModeSelect = document.getElementById('gameMode');
-const teamSizeSelect = document.getElementById('teamSize');
 const wheelCanvas = document.getElementById('wheel');
 const ctx = wheelCanvas.getContext('2d');
 const center = wheelCanvas.width / 2;
@@ -404,25 +807,137 @@ function saveNames() {
 }
 
 function saveState() {
-    localStorage.setItem(STATE_KEY, JSON.stringify(state));
+    const persistableState = {
+        ...state,
+        // Tee boxes are intentionally session-only and should not carry into other/new games.
+        teeBoxes: []
+    };
+    localStorage.setItem(STATE_KEY, JSON.stringify(persistableState));
+}
+
+function setBannerForSetupPage(isSetupVisible) {
+    const banner = document.getElementById('hubBanner');
+    if (!banner) return;
+    banner.classList.toggle('hidden', !isSetupVisible);
+}
+
+function syncThemeToggles(isLight) {
+    const selectToggle = document.getElementById('selectThemeToggle');
+    const setupToggle = document.getElementById('setupThemeToggle');
+    const wheelToggle = document.getElementById('wheelThemeToggle');
+    if (selectToggle) selectToggle.checked = isLight;
+    if (setupToggle) setupToggle.checked = isLight;
+    if (wheelToggle) wheelToggle.checked = isLight;
+}
+
+function applyTheme(isLight) {
+    document.body.classList.toggle('light-mode', isLight);
+    syncThemeToggles(isLight);
+}
+
+function onThemeToggle(isLight) {
+    applyTheme(isLight);
+    localStorage.setItem(THEME_KEY, isLight ? 'light' : 'dark');
+}
+
+function initTheme() {
+    const savedTheme = localStorage.getItem(THEME_KEY);
+    applyTheme(savedTheme === 'light');
+}
+
+function updateSetupGameSummary() {
+    const summary = document.getElementById('setupGameSummary');
+    if (!summary) return;
+    if (state.selectedGame === 'random-tee-box') {
+        summary.textContent = 'Random Tee Box setup. Spin for individual players (no teams) with random tee assignments.';
+    } else {
+        summary.textContent = 'Mario Party setup. Choose players, then hit start.';
+    }
+}
+
+function isRandomTeeBoxGame() {
+    return state.selectedGame === 'random-tee-box';
+}
+
+function chooseGame(gameType) {
+    state.selectedGame = gameType;
+    if (gameType === 'random-tee-box') {
+        state.teeBoxes = [...DEFAULT_RANDOM_TEE_BOXES];
+        state.selectedPlayers = [...names];
+        state.addPlayersEnabled = false;
+        document.getElementById('enableAddPlayers').checked = false;
+        state.showCourseSelectorEnabled = false;
+        document.getElementById('enableCourseSelector').checked = false;
+        state.teeBoxesEnabled = true;
+        state.gameMode = 'order';
+    } else {
+        state.teeBoxes = [];
+        state.teeBoxesEnabled = false;
+        document.getElementById('enableTeeBoxes').checked = false;
+        state.gameMode = 'team';
+    }
+    renderNameList();
+    renderTeeBoxList();
+    updatePlayersPanelForGame();
+    updateTeeBoxPanelForGame();
+    updateCoursePanelForGame();
+    document.getElementById('gameSelectPage').classList.add('hidden');
+    document.getElementById('setupPage').classList.remove('hidden');
+    document.getElementById('wheelPage').classList.add('hidden');
+    updateSetupGameSummary();
+    setBannerForSetupPage(false);
+}
+
+function goToGameSelect() {
+    document.getElementById('wheelPage').classList.add('hidden');
+    document.getElementById('setupPage').classList.add('hidden');
+    document.getElementById('gameSelectPage').classList.remove('hidden');
+    setBannerForSetupPage(true);
 }
 
 function loadSavedState() {
     const saved = localStorage.getItem(STATE_KEY);
     if (!saved) { alert('No saved game found.'); return; }
     state = JSON.parse(saved);
+    if (typeof state.addPlayersEnabled !== 'boolean') {
+        state.addPlayersEnabled = false;
+    }
+    if (typeof state.showCourseSelectorEnabled !== 'boolean') {
+        state.showCourseSelectorEnabled = false;
+    }
+    if (!state.selectedGame) {
+        state.selectedGame = 'mario-party';
+    }
+    if (!state.playerParDeltas || typeof state.playerParDeltas !== 'object') {
+        state.playerParDeltas = {};
+    }
+    if (!Array.isArray(state.teeBoxes)) {
+        state.teeBoxes = [];
+    }
+    if (state.selectedGame === 'random-tee-box') {
+        state.teeBoxes = [...DEFAULT_RANDOM_TEE_BOXES];
+        state.teeBoxesEnabled = true;
+        state.gameMode = 'order';
+    } else {
+        state.gameMode = 'team';
+    }
     names = Array.from(new Set([...names, ...state.selectedPlayers]));
     saveNames();
     renderNameList();
-    document.getElementById('gameMode').value = state.gameMode;
-    document.getElementById('teamSize').value = state.teamSize;
+    document.getElementById('enableAddPlayers').checked = state.addPlayersEnabled;
+    document.getElementById('enableCourseSelector').checked = state.showCourseSelectorEnabled;
+    updatePlayersPanelForGame();
     document.getElementById('enableTeeBoxes').checked = state.teeBoxesEnabled;
     renderTeeBoxList();
-    toggleTeeBoxInputs();
+    updateTeeBoxPanelForGame();
+    updateCoursePanelForGame();
     renderSelectedCourse();
+    updateSetupGameSummary();
     updateSetupStats();
+    document.getElementById('gameSelectPage').classList.add('hidden');
     document.getElementById('setupPage').classList.add('hidden');
     document.getElementById('wheelPage').classList.remove('hidden');
+    setBannerForSetupPage(false);
     drawWheel();
     renderScoreboard();
     renderHistory();
@@ -455,6 +970,94 @@ function renderNameList() {
         nameListDiv.appendChild(row);
     });
     updateSetupStats();
+}
+
+function renderCourseSelector() {
+    const select = document.getElementById('courseSelect');
+    const layoutSelect = document.getElementById('courseLayoutSelect');
+    const layoutContainer = document.getElementById('courseLayoutContainer');
+    const summary = document.getElementById('courseSummary');
+    if (!select || !layoutSelect || !layoutContainer) return;
+    
+    select.innerHTML = '<option value="">Choose a built-in course</option>';
+    builtInCourses.forEach(course => {
+        const option = document.createElement('option');
+        option.value = course.id;
+        const layoutCount = course.layouts.length;
+        option.textContent = `${course.name} (${layoutCount} layout${layoutCount === 1 ? '' : 's'})`;
+        select.appendChild(option);
+    });
+    
+    const course = builtInCourses.find(item => item.id === state.courseId);
+    if (!course) {
+        select.value = '';
+        layoutContainer.classList.add('hidden');
+        layoutSelect.innerHTML = '<option value="">Choose a layout</option>';
+        summary.textContent = 'No course selected yet.';
+        return;
+    }
+    
+    state.courseName = course.name;
+    select.value = state.courseId;
+    layoutContainer.classList.remove('hidden');
+    layoutSelect.innerHTML = '<option value="">Choose a layout</option>';
+    course.layouts.forEach(layout => {
+        const option = document.createElement('option');
+        option.value = layout.id;
+        option.textContent = `${layout.name} (${layout.holePars.length} holes, par ${layout.coursePar})`;
+        layoutSelect.appendChild(option);
+    });
+    
+    if (state.layoutId) {
+        layoutSelect.value = state.layoutId;
+    } else {
+        layoutSelect.value = '';
+    }
+    
+    if (state.layoutId) {
+        const layout = course.layouts.find(layout => layout.id === state.layoutId);
+        summary.textContent = `${state.courseName} - ${layout.name} (${layout.holePars.length} holes, par ${layout.coursePar})`;
+    } else {
+        summary.textContent = `${state.courseName} - Select a layout`;
+    }
+}
+
+function selectBuiltInCourse(courseId) {
+    const course = builtInCourses.find(item => item.id === courseId);
+    if (!course) {
+        state.courseId = '';
+        state.courseName = '';
+        state.layoutId = '';
+        state.layoutName = '';
+        state.coursePar = null;
+        state.holePars = [];
+        renderSelectedCourse();
+        renderCourseSelector();
+        return;
+    }
+    state.courseId = course.id;
+    state.courseName = course.name;
+    state.layoutId = '';
+    state.layoutName = '';
+    state.coursePar = null;
+    state.holePars = [];
+    saveState();
+    renderSelectedCourse();
+    renderCourseSelector();
+}
+
+function selectCourseLayout(layoutId) {
+    const course = builtInCourses.find(item => item.id === state.courseId);
+    if (!course) return;
+    const layout = course.layouts.find(item => item.id === layoutId);
+    if (!layout) return;
+    state.layoutId = layout.id;
+    state.layoutName = layout.name;
+    state.coursePar = layout.coursePar;
+    state.holePars = Array.from(layout.holePars);
+    saveState();
+    renderSelectedCourse();
+    renderCourseSelector();
 }
 
 function renderTeeBoxList() {
@@ -504,12 +1107,47 @@ function addName() {
 
 function updateSetupStats() {
     const selected = Array.from(nameListDiv.querySelectorAll('input:checked')).map(cb => cb.value);
-    playerCountEl.textContent = selected.length;
     state.selectedPlayers = selected;
-    state.gameMode = gameModeSelect.value;
-    state.teamSize = parseInt(teamSizeSelect.value, 10);
-    state.teeBoxesEnabled = document.getElementById('enableTeeBoxes').checked;
-    updateModeInfo();
+    state.gameMode = isRandomTeeBoxGame() ? 'order' : 'team';
+    state.teeBoxesEnabled = isRandomTeeBoxGame() ? true : document.getElementById('enableTeeBoxes').checked;
+}
+
+function togglePlayersPanel() {
+    const enabled = document.getElementById('enableAddPlayers').checked;
+    const playersPanel = document.getElementById('playersPanel');
+    const shouldShow = !isRandomTeeBoxGame() ? true : enabled;
+    playersPanel.style.display = shouldShow ? 'block' : 'none';
+    state.addPlayersEnabled = shouldShow;
+}
+
+function updatePlayersPanelForGame() {
+    const toggleRow = document.getElementById('playersToggleRow');
+    const toggle = document.getElementById('enableAddPlayers');
+    const isRandomGame = isRandomTeeBoxGame();
+    toggleRow.style.display = isRandomGame ? 'flex' : 'none';
+    if (!isRandomGame) {
+        toggle.checked = true;
+    }
+    togglePlayersPanel();
+}
+
+function toggleCoursePanel() {
+    const enabled = document.getElementById('enableCourseSelector').checked;
+    const coursePanel = document.getElementById('courseSelectorPanel');
+    const shouldShow = !isRandomTeeBoxGame() ? true : enabled;
+    coursePanel.style.display = shouldShow ? 'block' : 'none';
+    state.showCourseSelectorEnabled = shouldShow;
+}
+
+function updateCoursePanelForGame() {
+    const toggleRow = document.getElementById('courseToggleRow');
+    const toggle = document.getElementById('enableCourseSelector');
+    const isRandomGame = isRandomTeeBoxGame();
+    toggleRow.style.display = isRandomGame ? 'flex' : 'none';
+    if (!isRandomGame) {
+        toggle.checked = true;
+    }
+    toggleCoursePanel();
 }
 
 function addTeeBox() {
@@ -525,338 +1163,17 @@ function addTeeBox() {
     renderTeeBoxList();
 }
 
-function updateModeInfo() {
-    const mode = gameModeSelect.value;
-    teamSizePanel.style.display = mode === 'team' ? 'block' : 'none';
-    updateEntryCount();
-}
-
-function findNearbyCourses() {
-    const status = document.getElementById('courseStatus');
-    const results = document.getElementById('courseResults');
-    results.innerHTML = '';
-    status.textContent = 'Requesting your location...';
-    if (!navigator.geolocation) {
-        status.textContent = 'Geolocation is not supported by this browser. Enter coordinates below instead.';
-        return;
-    }
-    navigator.geolocation.getCurrentPosition(async position => {
-        const { latitude, longitude } = position.coords;
-        searchCoursesByCoords(latitude, longitude, `Searching for courses near ${latitude.toFixed(4)}, ${longitude.toFixed(4)}...`);
-    }, error => {
-        console.error(error);
-        status.textContent = 'Location permission denied or unavailable. Enter coordinates below instead.';
-    }, { enableHighAccuracy: true, timeout: 15000 });
-}
-
-async function searchCoursesByCoords(lat, lon, startMessage = 'Searching for courses by coordinates...') {
-    const status = document.getElementById('courseStatus');
-    const results = document.getElementById('courseResults');
-    const coordInput = document.getElementById('manualCoordinates');
-    results.innerHTML = '';
-    let latitude = typeof lat === 'number' ? lat : undefined;
-    let longitude = typeof lon === 'number' ? lon : undefined;
-    if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) {
-        const coords = parseLatLonInput(coordInput.value || '');
-        if (coords) {
-            latitude = coords.latitude;
-            longitude = coords.longitude;
-        }
-    }
-    if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) {
-        const coords = await geocodeAddress(coordInput.value || '');
-        if (!coords) {
-            status.textContent = 'Please enter valid coordinates or a recognizable address.';
-            return;
-        }
-        latitude = coords.latitude;
-        longitude = coords.longitude;
-    }
-    if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) {
-        status.textContent = 'Please enter valid latitude and longitude values.';
-        return;
-    }
-    status.textContent = startMessage;
-    try {
-        const courses = await fetchNearbyCourses(latitude, longitude);
-        if (!courses.length) {
-            status.textContent = 'No nearby courses found. Try a different location or enter a course manually.';
-            return;
-        }
-        status.textContent = `Found ${courses.length} nearby course${courses.length === 1 ? '' : 's'}.`;
-        renderCourseResults(courses);
-    } catch (error) {
-        console.error(error);
-        status.textContent = 'Unable to load nearby courses. Try again or enter a different location.';
-    }
-}
-
-function parseLatLonInput(input) {
-    const text = (input || '').trim();
-    if (!text) return null;
-    const cleaned = text.replace(/[^0-9\.\-+, ]+/g, ' ');
-    const match = cleaned.match(/(-?\d+(?:\.\d+)?)\s*[, ]\s*(-?\d+(?:\.\d+)?)/);
-    if (match) {
-        const lat = parseFloat(match[1]);
-        const lon = parseFloat(match[2]);
-        if (Number.isFinite(lat) && Number.isFinite(lon)) {
-            return { latitude: lat, longitude: lon };
-        }
-    }
-    const parts = cleaned.split(/[ ,]+/).filter(Boolean);
-    if (parts.length >= 2) {
-        const lat = parseFloat(parts[0]);
-        const lon = parseFloat(parts[1]);
-        if (Number.isFinite(lat) && Number.isFinite(lon)) {
-            return { latitude: lat, longitude: lon };
-        }
-    }
-    return null;
-}
-
-async function geocodeAddress(address) {
-    const query = (address || '').trim();
-    if (!query) return null;
-    const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=1`;
-    try {
-        const response = await fetch(url, { headers: { 'Accept': 'application/json' } });
-        if (!response.ok) return null;
-        const results = await response.json();
-        if (!Array.isArray(results) || !results.length) return null;
-        const first = results[0];
-        const lat = parseFloat(first.lat);
-        const lon = parseFloat(first.lon);
-        if (Number.isFinite(lat) && Number.isFinite(lon)) {
-            return { latitude: lat, longitude: lon };
-        }
-    } catch (error) {
-        console.error('Geocoding failed', error);
-    }
-    return null;
-}
-
-async function fetchNearbyCourses(lat, lon) {
-    const url = `https://udisc.com/courses?latitude=${encodeURIComponent(lat)}&longitude=${encodeURIComponent(lon)}`;
-    const response = await fetch(url, { credentials: 'omit' });
-    if (!response.ok) {
-        throw new Error('Unable to fetch UDisc course list');
-    }
-    const html = await response.text();
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, 'text/html');
-    let anchors = Array.from(doc.querySelectorAll('main ul li a[data-discover][href^="/courses/"]'));
-    if (!anchors.length) {
-        anchors = Array.from(doc.querySelectorAll('a[href^="/courses/"]'));
-    }
-    const courses = anchors.map((anchor, index) => {
-        const nameEl = anchor.querySelector('h3');
-        const detailText = anchor.textContent || '';
-        const rawText = detailText.replace(/\s+/g, ' ').trim();
-        const name = nameEl ? nameEl.textContent.trim() : rawText.split(' ').slice(0, 5).join(' ');
-        const distanceText = Array.from(anchor.querySelectorAll('div,span')).map(el => el.textContent.trim()).find(text => /\b\d+(?:\.\d+)?\s*(?:mi|km)\b/i.test(text));
-        const distanceMeters = parseDistance(distanceText);
-        const locationText = Array.from(anchor.querySelectorAll('div,span')).map(el => el.textContent.trim()).find(text => text && !/\b(?:mi|km|hard|easy|moderate|beginners?|technical|scenic|Est\.|Est|time|distance)\b/i.test(text));
-        const url = anchor.getAttribute('href') ? new URL(anchor.getAttribute('href'), 'https://udisc.com').href : null;
-        return {
-            id: url || `udisc-${index}`,
-            name,
-            location: locationText || null,
-            distanceMeters,
-            coursePar: null,
-            holePars: [],
-            url
-        };
-    }).filter(course => course.name && course.url);
-    return courses.slice(0, 20);
-}
-
-function parseDistance(text) {
-    if (!text) return null;
-    const match = text.match(/(\d+(?:\.\d+)?)\s*(mi|km)/i);
-    if (!match) return null;
-    const value = parseFloat(match[1]);
-    if (!Number.isFinite(value)) return null;
-    return match[2].toLowerCase().startsWith('k') ? Math.round(value * 1000) : Math.round(value * 1609.34);
-}
-
-function renderCourseResults(courses) {
-    const results = document.getElementById('courseResults');
-    results.innerHTML = '';
-    courses.forEach(course => {
-        const item = document.createElement('div');
-        item.className = 'course-result-item';
-        const info = document.createElement('div');
-        const locationText = course.location ? `${course.location}` : '';
-        const distanceText = course.distanceMeters ? `~${(course.distanceMeters / 1609.34).toFixed(1)} mi away` : '';
-        const details = [locationText, distanceText].filter(Boolean).join(' • ');
-        info.innerHTML = `<strong>${course.name}</strong><br>${details}${course.coursePar ? ` • Par ${course.coursePar}` : ''}`;
-        const select = document.createElement('button');
-        select.className = 'button';
-        select.type = 'button';
-        select.textContent = 'Select';
-        select.onclick = () => selectCourse(course);
-        item.appendChild(info);
-        item.appendChild(select);
-        results.appendChild(item);
-    });
-}
-
-async function selectCourse(course) {
-    const status = document.getElementById('courseStatus');
-    state.courseName = course.name;
-    state.coursePar = course.coursePar;
-    state.holePars = course.holePars;
-    if (course.url) {
-        status.textContent = `Loading details for ${course.name}...`;
-        try {
-            const details = await fetchCourseDetails(course.url);
-            state.coursePar = details.coursePar || state.coursePar;
-            state.holePars = details.holePars.length ? details.holePars : state.holePars;
-        } catch (error) {
-            console.error('UDisc course detail parse failed', error);
-        }
-    }
-    saveState();
-    renderSelectedCourse();
-    status.textContent = `Selected ${course.name}.`;
-    document.getElementById('courseResults').innerHTML = '';
-}
-
-async function fetchCourseDetails(courseUrl) {
-    const response = await fetch(courseUrl, { credentials: 'omit' });
-    if (!response.ok) {
-        throw new Error('Unable to fetch course details');
-    }
-    const html = await response.text();
-    const parsed = parseLayoutOrCourseHtml(html);
-    if (parsed && parsed.holePars.length) {
-        return parsed;
-    }
-    const layoutUrl = findLayoutPageUrl(html, courseUrl);
-    if (!layoutUrl) {
-        return { coursePar: null, holePars: [] };
-    }
-    const layoutResponse = await fetch(layoutUrl, { credentials: 'omit' });
-    if (!layoutResponse.ok) {
-        return { coursePar: null, holePars: [] };
-    }
-    const layoutHtml = await layoutResponse.text();
-    return parseLayoutOrCourseHtml(layoutHtml) || { coursePar: null, holePars: [] };
-}
-
-function findLayoutPageUrl(html, courseUrl) {
-    const match = html.match(/href="(\/courses\/[^\"]+(?:layouts|v2\/layouts)\/\d+)"/i);
-    if (match && match[1]) {
-        return new URL(match[1], 'https://udisc.com').href;
-    }
-    return null;
-}
-
-function parseLayoutOrCourseHtml(html) {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(html, 'text/html');
-    const text = (doc.body.textContent || '').replace(/\s+/g, ' ');
-    const sectionIndex = text.indexOf('Holes Dist Par');
-    if (sectionIndex < 0) {
-        return null;
-    }
-    const slice = text.slice(sectionIndex + 'Holes Dist Par'.length, sectionIndex + 1800);
-    const numbers = Array.from(slice.matchAll(/\b(\d+)\b/g), m => parseInt(m[1], 10));
-    const holePars = [];
-    for (let i = 0; i + 2 < numbers.length; i += 3) {
-        holePars.push(numbers[i + 2]);
-        if (holePars.length >= 30) break;
-    }
-    const courseParMatch = text.match(/Par\s+(\d{1,3})\b/);
-    const coursePar = holePars.length ? holePars.reduce((sum, value) => sum + value, 0) : (courseParMatch ? parseInt(courseParMatch[1], 10) : null);
-    return { coursePar, holePars };
-}
-
 function renderSelectedCourse() {
-    const details = document.getElementById('courseDetails');
-    if (!state.courseName) {
-        details.classList.add('hidden');
-        return;
-    }
-    details.classList.remove('hidden');
-    document.getElementById('selectedCourseName').textContent = `Course: ${state.courseName}`;
-    document.getElementById('selectedCoursePar').textContent = state.coursePar ? `Course par: ${state.coursePar}` : 'Course par: unknown';
-    document.getElementById('selectedHolePars').textContent = state.holePars.length ? `Hole pars: ${state.holePars.join(', ')}` : 'Hole pars: unknown';
-}
-
-function clearCourseSelection() {
-    state.courseName = '';
-    state.coursePar = null;
-    state.holePars = [];
-    saveState();
-    renderSelectedCourse();
-    document.getElementById('courseStatus').textContent = 'Course selection cleared. Enter a course manually or search again.';
-    document.getElementById('courseResults').innerHTML = '';
-}
-
-function saveManualCourse() {
-    const name = document.getElementById('manualCourseName').value.trim();
-    const parValue = document.getElementById('manualCoursePar').value.trim();
-    const holeText = document.getElementById('manualHolePars').value.trim();
-    if (!name) {
-        alert('Please enter a course name.');
-        return;
-    }
-    const holePars = holeText ? holeText.split(',').map(item => parseInt(item.trim(), 10)).filter(Number.isFinite) : [];
-    const par = parseInt(parValue, 10);
-    state.courseName = name;
-    state.holePars = holePars;
-    state.coursePar = Number.isFinite(par) ? par : (holePars.length ? holePars.reduce((sum, value) => sum + value, 0) : null);
-    saveState();
-    renderSelectedCourse();
-    document.getElementById('courseStatus').textContent = 'Manual course saved.';
-}
-
-function parseOverpassCourse(tags) {
-    const course = { coursePar: null, holePars: [] };
-    if (tags['disc_golf:par']) {
-        const par = parseInt(tags['disc_golf:par'], 10);
-        if (Number.isFinite(par)) {
-            course.coursePar = par;
-        }
-    }
-    if (tags['hole:par']) {
-        const values = tags['hole:par'].split(/[^0-9]+/).map(item => parseInt(item, 10)).filter(Number.isFinite);
-        if (values.length) {
-            course.holePars = values;
-            if (!course.coursePar) {
-                course.coursePar = values.reduce((sum, value) => sum + value, 0);
-            }
-        }
-    }
-    Object.keys(tags).forEach(key => {
-        const match = key.match(/^hole:par:(\d+)$/);
-        if (match) {
-            const index = parseInt(match[1], 10) - 1;
-            const value = parseInt(tags[key], 10);
-            if (Number.isFinite(value)) {
-                course.holePars[index] = value;
-            }
-        }
-    });
-    course.holePars = course.holePars.filter(Number.isFinite);
-    if (!course.coursePar && course.holePars.length) {
-        course.coursePar = course.holePars.reduce((sum, value) => sum + value, 0);
-    }
-    return course;
-}
-
-function haversineDistance(lat1, lon1, lat2, lon2) {
-    const toRad = value => value * Math.PI / 180;
-    const dLat = toRad(lat2 - lat1);
-    const dLon = toRad(lon2 - lon1);
-    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return 6371000 * c;
+    // Nearby course lookup was removed; built-in course selector remains in use.
+    return;
 }
 
 function toggleTeeBoxInputs() {
-    const enabled = document.getElementById('enableTeeBoxes').checked;
+    const teeBoxToggle = document.getElementById('enableTeeBoxes');
+    const enabled = isRandomTeeBoxGame() ? true : teeBoxToggle.checked;
+    if (isRandomTeeBoxGame()) {
+        teeBoxToggle.checked = true;
+    }
     const teeBoxInput = document.getElementById('newTeeBox');
     const addButton = document.getElementById('addTeeBoxButton');
     const teeBoxEntryPanel = document.getElementById('teeBoxEntryPanel');
@@ -874,6 +1191,19 @@ function toggleTeeBoxInputs() {
     }
 }
 
+function updateTeeBoxPanelForGame() {
+    const toggleRow = document.getElementById('teeBoxToggleRow');
+    const alwaysOnNote = document.getElementById('teeBoxAlwaysOnNote');
+    const isRandomGame = isRandomTeeBoxGame();
+    toggleRow.style.display = isRandomGame ? 'none' : 'flex';
+    alwaysOnNote.classList.toggle('hidden', !isRandomGame);
+    if (isRandomGame) {
+        document.getElementById('enableTeeBoxes').checked = true;
+        state.teeBoxesEnabled = true;
+    }
+    toggleTeeBoxInputs();
+}
+
 function randomPick(array) {
     return array[Math.floor(Math.random() * array.length)];
 }
@@ -887,50 +1217,54 @@ function assignTeeBoxesToTeams(teamCount) {
     return Array.from({ length: teamCount }, () => randomPick(state.teeBoxes));
 }
 
-function updateEntryCount() {
-    const mode = gameModeSelect.value;
-    const players = state.selectedPlayers.length;
-    if (!players) {
-        entryCountEl.textContent = '0';
+function startGame() {
+    if (!state.selectedGame) {
+        alert('Please pick a game from the selection page first.');
         return;
     }
-    if (mode === 'team') {
-        entryCountEl.textContent = Math.max(1, combinations(players, state.teamSize));
-    } else {
-        entryCountEl.textContent = players;
+    if (isRandomTeeBoxGame() && !state.selectedPlayers.length) {
+        state.selectedPlayers = [...names];
     }
-}
-
-function startGame() {
-    if (state.selectedPlayers.length < 2) {
+    if (isRandomTeeBoxGame()) {
+        if (!state.selectedPlayers.length) {
+            alert('Please add at least 1 player.');
+            return;
+        }
+    } else if (state.selectedPlayers.length < 2) {
         alert('Please select at least 2 players.');
         return;
     }
-    state.teeBoxesEnabled = document.getElementById('enableTeeBoxes').checked;
-    if (state.teeBoxesEnabled && !state.teeBoxes.length) {
+    state.teeBoxesEnabled = isRandomTeeBoxGame() ? true : document.getElementById('enableTeeBoxes').checked;
+    if (state.teeBoxesEnabled && !state.teeBoxes.length && !isRandomTeeBoxGame()) {
         alert('Please add at least one tee box option.');
         return;
     }
     state.playerScores = {};
     state.selectedPlayers.forEach(name => state.playerScores[name] = 0);
+    state.playerParDeltas = {};
+    state.selectedPlayers.forEach(name => state.playerParDeltas[name] = 0);
     state.holeNumber = 0;
     state.history = [];
     state.wheelEntries = buildWheelEntries();
     if (!state.wheelEntries.length) {
-        alert('Unable to generate wheel entries. Adjust team size or selected players.');
+        alert('Unable to generate wheel entries. Adjust selected players and try again.');
         return;
     }
-    state.gameMode = gameModeSelect.value;
-    state.teamSize = parseInt(teamSizeSelect.value, 10);
+    state.gameMode = isRandomTeeBoxGame() ? 'order' : 'team';
     saveState();
     drawWheel();
     document.getElementById('setupPage').classList.add('hidden');
     document.getElementById('wheelPage').classList.remove('hidden');
+    setBannerForSetupPage(false);
     renderScoreboard();
     renderHistory();
 }
 
 function buildWheelEntries() {
+    if (isRandomTeeBoxGame()) {
+        // For Random Tee Box mode, wheel spins for player order, not tee boxes
+        return shuffle([...state.selectedPlayers]).map((player, index) => ({ label: `${index + 1}. ${player}`, players: [player] }));
+    }
     if (state.gameMode === 'order') {
         return shuffle([...state.selectedPlayers]).map((player, index) => ({ label: `${index + 1}. ${player}`, players: [player] }));
     }
@@ -981,38 +1315,146 @@ function formatTeam(team) {
     return `${team.slice(0, -1).join(', ')}, and ${team[team.length - 1]}`;
 }
 
-function combinations(n, k) {
-    if (k <= 0 || k > n) return 0;
-    let result = 1;
-    for (let i = 0; i < k; i++) {
-        result = result * (n - i) / (i + 1);
-    }
-    return Math.round(result);
-}
-
 function drawWheel() {
     if (!state.wheelEntries.length) return;
     ctx.clearRect(0, 0, wheelCanvas.width, wheelCanvas.height);
     const slice = 2 * Math.PI / state.wheelEntries.length;
-    const colors = ['#ff6363', '#ffb347', '#ffd93d', '#7ad0ff', '#7d8bff', '#c87dff', '#ff6ef5', '#5bf7b3'];
+    const colors = [
+        '#ff595e', '#ffca3a', '#8ac926', '#1982c4', '#6a4c93', '#f72585',
+        '#00bbf9', '#ffd166', '#06d6a0', '#4361ee', '#ef476f', '#ff9f1c'
+    ];
+
+    // Party glow behind the wheel.
+    const glow = ctx.createRadialGradient(center, center, radius * 0.25, center, center, radius * 1.1);
+    glow.addColorStop(0, 'rgba(255,255,255,0.3)');
+    glow.addColorStop(0.55, 'rgba(255,214,102,0.2)');
+    glow.addColorStop(1, 'rgba(255,255,255,0)');
+    ctx.beginPath();
+    ctx.arc(center, center, radius + 8, 0, 2 * Math.PI);
+    ctx.fillStyle = glow;
+    ctx.fill();
+
+    // Confetti dots around the wheel edge for a party vibe.
+    const confettiColors = ['#ff595e', '#ffca3a', '#8ac926', '#1982c4', '#f72585'];
+    for (let i = 0; i < 36; i++) {
+        const angle = (2 * Math.PI * i) / 36;
+        const confettiRadius = radius + 16;
+        const x = center + Math.cos(angle) * confettiRadius;
+        const y = center + Math.sin(angle) * confettiRadius;
+        ctx.beginPath();
+        ctx.arc(x, y, 3.4, 0, 2 * Math.PI);
+        ctx.fillStyle = confettiColors[i % confettiColors.length];
+        ctx.fill();
+    }
+
     state.wheelEntries.forEach((entry, index) => {
         const start = index * slice;
         const end = start + slice;
+
+        // Slice fill.
         ctx.beginPath();
         ctx.moveTo(center, center);
         ctx.arc(center, center, radius, start, end);
+        ctx.shadowColor = 'rgba(0,0,0,0.16)';
+        ctx.shadowBlur = 10;
         ctx.fillStyle = colors[index % colors.length];
         ctx.fill();
+        ctx.shadowBlur = 0;
+
+        // Per-slice border for clear separation.
+        ctx.strokeStyle = 'rgba(255,255,255,0.95)';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
         ctx.save();
         ctx.translate(center, center);
         ctx.rotate(start + slice / 2);
+
+        // Label styling: outlined text improves readability over bright colors.
         ctx.fillStyle = '#ffffff';
-        ctx.font = '14px Arial';
+        ctx.strokeStyle = 'rgba(0,0,0,0.6)';
+        ctx.lineWidth = 4;
+        ctx.font = '900 14px Segoe UI';
         ctx.textAlign = 'left';
         ctx.textBaseline = 'middle';
+
+        const oldFillText = ctx.fillText.bind(ctx);
+        ctx.fillText = (text, x, y) => {
+            ctx.strokeText(text, x, y);
+            oldFillText(text, x, y);
+        };
         wrapText(ctx, entry.label, radius * 0.34, -radius * 0.1, 120, 18);
+        ctx.fillText = oldFillText;
         ctx.restore();
     });
+
+    // Strong radial dividers for each option.
+    for (let i = 0; i < state.wheelEntries.length; i++) {
+        const angle = i * slice;
+        const x = center + Math.cos(angle) * radius;
+        const y = center + Math.sin(angle) * radius;
+        ctx.beginPath();
+        ctx.moveTo(center, center);
+        ctx.lineTo(x, y);
+        ctx.strokeStyle = 'rgba(255,255,255,0.98)';
+        ctx.lineWidth = 3;
+        ctx.stroke();
+    }
+
+    // Outer ring for a cleaner finished look.
+    ctx.beginPath();
+    ctx.arc(center, center, radius, 0, 2 * Math.PI);
+    ctx.strokeStyle = '#ffffff';
+    ctx.lineWidth = 7;
+    ctx.shadowColor = 'rgba(255,255,255,0.45)';
+    ctx.shadowBlur = 12;
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+
+    // Secondary inner ring for board-game style framing.
+    ctx.beginPath();
+    ctx.arc(center, center, radius - 14, 0, 2 * Math.PI);
+    ctx.strokeStyle = 'rgba(0,0,0,0.22)';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Center cap with star.
+    const capGradient = ctx.createRadialGradient(center, center, 4, center, center, 30);
+    capGradient.addColorStop(0, '#ffffff');
+    capGradient.addColorStop(0.55, '#ffe066');
+    capGradient.addColorStop(1, '#ff9f1c');
+    ctx.beginPath();
+    ctx.arc(center, center, 28, 0, 2 * Math.PI);
+    ctx.fillStyle = capGradient;
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(0,0,0,0.45)';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Star icon in center.
+    const spikes = 5;
+    const outerR = 14;
+    const innerR = 6;
+    let rot = -Math.PI / 2;
+    const step = Math.PI / spikes;
+    ctx.beginPath();
+    ctx.moveTo(center, center - outerR);
+    for (let i = 0; i < spikes; i++) {
+        const xOuter = center + Math.cos(rot) * outerR;
+        const yOuter = center + Math.sin(rot) * outerR;
+        ctx.lineTo(xOuter, yOuter);
+        rot += step;
+        const xInner = center + Math.cos(rot) * innerR;
+        const yInner = center + Math.sin(rot) * innerR;
+        ctx.lineTo(xInner, yInner);
+        rot += step;
+    }
+    ctx.closePath();
+    ctx.fillStyle = '#fff7b2';
+    ctx.fill();
+    ctx.strokeStyle = '#c97b00';
+    ctx.lineWidth = 2;
+    ctx.stroke();
 }
 
 function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
@@ -1039,8 +1481,11 @@ function spinWheel() {
         return;
     }
     state.holeNumber += 1;
-    document.getElementById('holeCounter').textContent = `Hole ${state.holeNumber}`;
-    document.getElementById('holeCounter').classList.remove('hidden');
+    updateParDeltaSnapshot();
+    if (!isRandomTeeBoxGame()) {
+        document.getElementById('holeCounter').textContent = `Hole ${state.holeNumber}`;
+        document.getElementById('holeCounter').classList.remove('hidden');
+    }
     const index = Math.floor(Math.random() * state.wheelEntries.length);
     const sliceDeg = 360 / state.wheelEntries.length;
     const rotation = 360 * 5 + index * sliceDeg + sliceDeg / 2;
@@ -1051,6 +1496,10 @@ function spinWheel() {
     wheelCanvas.style.transform = `rotate(${currentRotation}deg)`;
     setTimeout(() => {
         showSpinResult(index);
+        if (isRandomTeeBoxGame()) {
+            state.wheelEntries = buildWheelEntries();
+            drawWheel();
+        }
         saveState();
     }, 4200);
 }
@@ -1062,9 +1511,40 @@ function showSpinResult(index) {
     const title = document.createElement('div');
     title.style.marginBottom = '12px';
     title.innerHTML = `<strong>Selected entry:</strong> ${selectedEntry.label}`;
-    resultDiv.appendChild(title);
+    if (!isRandomTeeBoxGame()) {
+        resultDiv.appendChild(title);
+    }
     let teeAssignments = [];
-    if (state.gameMode === 'order') {
+    if (isRandomTeeBoxGame()) {
+        const player = selectedEntry.players[0] || '';
+        const teeBox = state.teeBoxes.length ? state.teeBoxes[Math.floor(Math.random() * state.teeBoxes.length)] : '';
+        const info = document.createElement('div');
+        info.className = 'team-card';
+
+        const header = document.createElement('div');
+        header.className = 'team-card-header';
+        header.textContent = `Tee box: ${teeBox}`;
+
+        const subtitle = document.createElement('div');
+        subtitle.className = 'team-card-subtitle';
+        subtitle.textContent = player ? `Player: ${player}` : '';
+
+        const controls = document.createElement('div');
+        controls.className = 'team-controls';
+        const minus = document.createElement('button');
+        minus.textContent = '➖';
+        const plus = document.createElement('button');
+        plus.textContent = '➕';
+        const counter = document.createElement('span');
+        counter.className = 'team-counter';
+        counter.textContent = '0';
+        minus.onclick = () => updateTeamScore([player], -1, counter);
+        plus.onclick = () => updateTeamScore([player], 1, counter);
+        controls.append(minus, counter, plus);
+
+        info.append(header, subtitle, controls);
+        resultDiv.appendChild(info);
+    } else if (state.gameMode === 'order') {
         const info = document.createElement('div');
         info.textContent = `Next player: ${selectedEntry.players[0]}`;
         resultDiv.appendChild(info);
@@ -1080,7 +1560,11 @@ function showSpinResult(index) {
             header.textContent = `Team ${teamIndex + 1}`;
             const subtitle = document.createElement('div');
             subtitle.className = 'team-card-subtitle';
-            subtitle.textContent = teeAssignments.length ? `Tee box: ${teeAssignments[teamIndex]}` : 'No tee box assigned';
+            if (state.teeBoxesEnabled) {
+                subtitle.textContent = teeAssignments.length ? `Tee box: ${teeAssignments[teamIndex]}` : 'No tee box assigned';
+            } else {
+                subtitle.textContent = '';
+            }
             const playerList = document.createElement('div');
             playerList.className = 'team-player-list';
             team.forEach(player => {
@@ -1107,7 +1591,7 @@ function showSpinResult(index) {
         resultDiv.appendChild(teamCards);
     }
     resultDiv.classList.remove('hidden');
-    if (state.gameMode === 'team') {
+    if (!isRandomTeeBoxGame() && state.gameMode === 'team') {
         let soloPlayers = [];
         let hasMultiplePlayerTeams = false;
         selectedEntry.teams.forEach((team) => {
@@ -1138,7 +1622,71 @@ function updateTeamScore(team, delta, counter) {
     renderScoreboard();
 }
 
+function getRunningParForCompletedHoles() {
+    if (!Array.isArray(state.holePars) || !state.holePars.length || !state.holeNumber) {
+        return 0;
+    }
+    const completedHoles = Math.max(0, Math.min(state.holeNumber - 1, state.holePars.length));
+    return state.holePars
+        .slice(0, completedHoles)
+        .reduce((sum, par) => sum + (Number.isFinite(par) ? par : 0), 0);
+}
+
+function isFinalHoleInProgress() {
+    return Array.isArray(state.holePars)
+        && state.holePars.length > 0
+        && state.holeNumber === state.holePars.length;
+}
+
+function getRunningParIncludingCurrentHole() {
+    if (!Array.isArray(state.holePars) || !state.holePars.length || !state.holeNumber) {
+        return 0;
+    }
+    const holesThroughCurrent = Math.max(0, Math.min(state.holeNumber, state.holePars.length));
+    return state.holePars
+        .slice(0, holesThroughCurrent)
+        .reduce((sum, par) => sum + (Number.isFinite(par) ? par : 0), 0);
+}
+
+function updateParDeltaSnapshot() {
+    const runningPar = getRunningParForCompletedHoles();
+    if (!state.playerParDeltas || typeof state.playerParDeltas !== 'object') {
+        state.playerParDeltas = {};
+    }
+    state.selectedPlayers.forEach(player => {
+        const scoreValue = state.playerScores[player] || 0;
+        state.playerParDeltas[player] = scoreValue - runningPar;
+    });
+}
+
+function formatScoreWithParDelta(scoreValue, parDelta) {
+    // Without course/layout par data there is nothing to compare against.
+    if (!Array.isArray(state.holePars) || !state.holePars.length) {
+        return String(scoreValue);
+    }
+    // Do not show par comparison until at least one hole is completed.
+    if (state.holeNumber < 2) {
+        return String(scoreValue);
+    }
+    if (!Number.isFinite(parDelta)) {
+        return String(scoreValue);
+    }
+    const delta = parDelta;
+    if (delta > 0) {
+        return `${scoreValue} (+${delta})`;
+    }
+    if (delta < 0) {
+        return `${scoreValue} (${delta})`;
+    }
+    return `${scoreValue} (0)`;
+}
+
 function renderScoreboard() {
+    const scoreboardPanel = document.getElementById('scoreboard');
+    if (isRandomTeeBoxGame()) {
+        scoreboardPanel.classList.add('hidden');
+        return;
+    }
     const container = document.getElementById('playersScores');
     container.innerHTML = '';
     const players = [...state.selectedPlayers];
@@ -1150,15 +1698,25 @@ function renderScoreboard() {
         name.className = 'score-name';
         name.textContent = player;
         const score = document.createElement('span');
-        score.textContent = state.playerScores[player] || 0;
+        const scoreValue = state.playerScores[player] || 0;
+        let parDelta = state.playerParDeltas[player] ?? 0;
+        if (isFinalHoleInProgress()) {
+            const runningPar = getRunningParIncludingCurrentHole();
+            parDelta = scoreValue - runningPar;
+        }
+        score.textContent = formatScoreWithParDelta(scoreValue, parDelta);
         row.append(name, score);
         container.appendChild(row);
     });
-    document.getElementById('scoreboard').classList.remove('hidden');
+    scoreboardPanel.classList.remove('hidden');
 }
 
 function renderHistory() {
     const historyPanel = document.getElementById('historyPanel');
+    if (isRandomTeeBoxGame()) {
+        historyPanel.classList.add('hidden');
+        return;
+    }
     const list = document.getElementById('historyList');
     list.innerHTML = '';
     const soloPlayerEntries = Object.entries(state.soloPlayerCounts);
@@ -1178,12 +1736,18 @@ function renderHistory() {
 function resetToSetup() {
     document.getElementById('wheelPage').classList.add('hidden');
     document.getElementById('setupPage').classList.remove('hidden');
+    state.gameMode = isRandomTeeBoxGame() ? 'order' : 'team';
+    updatePlayersPanelForGame();
+    updateTeeBoxPanelForGame();
+    updateCoursePanelForGame();
+    setBannerForSetupPage(false);
     document.getElementById('result').classList.add('hidden');
     document.getElementById('holeCounter').classList.add('hidden');
 }
 
 function resetGame() {
     state.playerScores = {};
+    state.playerParDeltas = {};
     state.holeNumber = 0;
     state.history = [];
     state.soloPlayerCounts = {};
@@ -1205,10 +1769,19 @@ function shuffle(array) {
 }
 
 function init() {
+    initTheme();
+    setBannerForSetupPage(true);
+    document.getElementById('gameSelectPage').classList.remove('hidden');
+    document.getElementById('setupPage').classList.add('hidden');
+    document.getElementById('wheelPage').classList.add('hidden');
+    document.getElementById('enableAddPlayers').checked = state.addPlayersEnabled;
+    document.getElementById('enableCourseSelector').checked = state.showCourseSelectorEnabled;
+    updatePlayersPanelForGame();
     renderNameList();
-    updateModeInfo();
-    document.getElementById('gameMode').value = state.gameMode;
-    document.getElementById('teamSize').value = state.teamSize;
+    updateSetupGameSummary();
+    updateTeeBoxPanelForGame();
+    updateCoursePanelForGame();
+    renderCourseSelector();
     renderSelectedCourse();
 }
 
