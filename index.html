@@ -1222,10 +1222,18 @@ function selectBuiltInCourse(courseId) {
     }
     state.courseId = course.id;
     state.courseName = course.name;
-    state.layoutId = '';
-    state.layoutName = '';
-    state.coursePar = null;
-    state.holePars = [];
+    if (course.layouts.length === 1) {
+        const onlyLayout = course.layouts[0];
+        state.layoutId = onlyLayout.id;
+        state.layoutName = onlyLayout.name;
+        state.coursePar = onlyLayout.coursePar;
+        state.holePars = Array.from(onlyLayout.holePars);
+    } else {
+        state.layoutId = '';
+        state.layoutName = '';
+        state.coursePar = null;
+        state.holePars = [];
+    }
     saveState();
     renderSelectedCourse();
     renderCourseSelector();
