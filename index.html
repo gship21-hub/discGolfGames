@@ -543,6 +543,93 @@ const defaultNames = ["Grant","Caleb","Will","Chris","Evan","Aiden","James","Jak
 
 const builtInCourses = [
     {
+        id: 'codorus-state-park-blue',
+        name: 'Codorus State Park Blue',
+        layouts: [
+            {
+                id: 'short',
+                name: 'Short Layout',
+                color: '#FF4444',
+                holePars: [3, 3, 3, 3, 3, 4, 4, 3, 3,
+                            3, 4, 3, 3, 3, 3, 3, 3, 3],
+                coursePar: 57,
+                notes: '18-hole Short Layout'
+            },
+            {
+                id: 'long',
+                name: 'Long Layout',
+                color: '#FF4444',
+                holePars: [4, 3, 3, 3, 3, 4, 4, 3, 3,
+                            4, 4, 4, 3, 3, 4, 4, 3, 3],
+                coursePar: 62,
+                notes: '18-hole Long Layout'
+            },
+        ]
+    },
+    {
+        id: 'codorus-state-park-purple',
+        name: 'Codorus State Park Purple',
+        layouts: [
+            {
+                id: 'main',
+                name: 'Main Layout',
+                color: '#FF4444',
+                holePars: [3, 4, 3, 3, 3, 4, 3, 4, 3,
+                            4, 3, 4, 3, 3, 3, 3, 3, 3],
+                coursePar: 59,
+                notes: '18-hole Main Layout'
+            }
+        ]
+    },
+    {
+        id: 'codorus-state-park-red',
+        name: 'Codorus State Park Red',
+        layouts: [
+            {
+                id: 'red layout',
+                name: 'Red Layout',
+                color: '#FF4444',
+                holePars: [3, 3, 3, 4, 3, 3, 4, 3, 3,
+                            3, 3, 3, 3, 3, 3, 3, 3, 4],
+                coursePar: 57,
+                notes: '18-hole Red Layout'
+            },
+            {
+                id: 'nvs-red-purple-layout',
+                name: 'NvS Red-Purple Layout',
+                color: '#FF4444',
+                holePars: [4, 4, 4, 3, 3, 4, 5, 4, 4,
+                            3, 3, 3, 3, 3, 3, 3, 3, 4],
+                coursePar: 63,
+                notes: '18-hole Long Layout'
+            },
+        ]
+    },
+    {
+        id: 'emmitsburg-dgc',
+        name: 'Emmitsburg DGC',
+        layouts: [
+            {
+                id: 'long-blue',
+                name: 'Blue/Long Layout',
+                color: '#4444FF',
+                holePars: [3, 4, 3, 3, 3, 3, 3, 3, 3,
+                            4, 3, 3, 3, 3, 3, 4, 3, 5],
+                coursePar: 59,
+                notes: '18-hole Blue/Long Layout'
+            },
+            {
+                id: 'short-red',
+                name: 'Red/Short Layout',
+                color: '#FF4444',
+                holePars: [3, 3, 3, 3, 3, 3, 3, 3, 3,
+                            3, 3, 3, 3, 3, 3, 3, 3, 3],
+                coursePar: 54,
+                notes: '18-hole Red/Short Layout'
+            }
+        ]
+    },
+    {
         id: 'heritage-farm-park',
         name: 'Heritage Farm Park',
         layouts: [
@@ -561,71 +648,6 @@ const builtInCourses = [
                 holePars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 3, 3, 3, 3, 3, 3, 5, 4],
                 coursePar: 64,
                 notes: '20-hole blue long layout'
-            }
-        ]
-    },
-    {
-        id: 'woodsboro-regional-park',
-        name: 'Woodsboro Regional Park',
-        layouts: [
-            {
-                id: 'red-yellow-18',
-                name: 'Red to Yellow 18 Hole Layout',
-                color: '#FF6B1A',
-                holePars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,],
-                coursePar: 54,
-                notes: '18-hole Red to Yellow Layout'
-            },
-            {
-                id: 'red-white-18',
-                name: 'Red to White 18 Hole Layout',
-                color: '#FF4444',
-                holePars: [3, 3, 3, 3, 3, 3, 3, 3, 3,
-                           4, 4, 3, 3, 3, 3, 3, 3, 3],
-                coursePar: 56,
-                notes: '18-hole Red to White Layout'
-            },
-            {
-                id: 'blue-yellow-18',
-                name: 'Blue to Yellow 18  Hole Layout',
-                color: '#4444FF',
-                holePars: [3, 3, 3, 3, 4, 3, 3, 3, 3,
-                           3, 3, 3, 3, 3, 3, 3, 3, 3],
-                coursePar: 55,
-                notes: '18-hole Blue to Yellow Layout'
-            },
-            {
-                id: 'blue-yellow-20',
-                name: 'Blue to Yellow 20 Hole Layout',
-                color: '#4444FF',
-                holePars: [3, 3, 3, 3, 4, 3, 3, 3, 3,
-                           3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
-                coursePar: 61,
-                notes: '20-hole Blue to Yellow Layout'
-            },
-        ]
-    },
-        {
-        id: 'riverwalk-park',
-        name: 'Riverwalk Park',
-        layouts: [
-            {
-                id: 'red-short',
-                name: 'Red/Short Layout',
-                color: '#FF4444',
-                holePars: [3, 3, 3, 3, 3, 3, 3, 3, 3,
-                           3, 3, 3, 3, 3, 3, 3, 3, 3],
-                coursePar: 54,
-                notes: '18-hole Red/Short Layout'
-            },
-            {
-                id: 'green-long',
-                name: 'Green/Long Layout',
-                color: '#44FF44',
-                holePars: [3, 3, 3, 3, 3, 3, 3, 3, 3,
-                           3, 3, 3, 3, 3, 3, 3, 3, 3],
-                coursePar: 54,
-                notes: '18-hole Green/Long Layout'
             }
         ]
     },
@@ -653,7 +675,7 @@ const builtInCourses = [
             }
         ]
     },
-        {
+    {
         id: 'leister-park',
         name: 'Leister Park',
         layouts: [
@@ -668,7 +690,7 @@ const builtInCourses = [
             }
         ]
     },
-        {
+    {
         id: 'mckeldin-state-park',
         name: 'McKeldin State Park',
         layouts: [
@@ -720,11 +742,35 @@ const builtInCourses = [
         ]
     },
     {
+        id: 'riverwalk-park',
+        name: 'Riverwalk Park',
+        layouts: [
+            {
+                id: 'red-short',
+                name: 'Red/Short Layout',
+                color: '#FF4444',
+                holePars: [3, 3, 3, 3, 3, 3, 3, 3, 3,
+                           3, 3, 3, 3, 3, 3, 3, 3, 3],
+                coursePar: 54,
+                notes: '18-hole Red/Short Layout'
+            },
+            {
+                id: 'green-long',
+                name: 'Green/Long Layout',
+                color: '#44FF44',
+                holePars: [3, 3, 3, 3, 3, 3, 3, 3, 3,
+                           3, 3, 3, 3, 3, 3, 3, 3, 3],
+                coursePar: 54,
+                notes: '18-hole Green/Long Layout'
+            }
+        ]
+    },
+    {
         id: 'rockburn-branch',
         name: 'Rockburn Branch',
         layouts: [
             {
-                id: 'long-red', 
+                id: 'long-red',
                 name: 'Long to Red Layout',
                 color: '#FF4444',
                 holePars: [3, 3, 3, 3, 4, 3, 3, 3, 3,
@@ -743,28 +789,45 @@ const builtInCourses = [
             }
         ]
     },
-        {
-        id: 'emmitsburg-dgc',
-        name: 'Emmitsburg DGC',
+    {
+        id: 'woodsboro-regional-park',
+        name: 'Woodsboro Regional Park',
         layouts: [
             {
-                id: 'long-blue', 
-                name: 'Blue/Long Layout',
-                color: '#4444FF',
-                holePars: [3, 4, 3, 3, 3, 3, 3, 3, 3,
-                            4, 3, 3, 3, 3, 3, 4, 3, 5],
-                coursePar: 59,
-                notes: '18-hole Blue/Long Layout'
+                id: 'red-yellow-18',
+                name: 'Red to Yellow 18 Hole Layout',
+                color: '#FF6B1A',
+                holePars: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,],
+                coursePar: 54,
+                notes: '18-hole Red to Yellow Layout'
             },
             {
-                id: 'short-red',
-                name: 'Red/Short Layout',
+                id: 'red-white-18',
+                name: 'Red to White 18 Hole Layout',
                 color: '#FF4444',
                 holePars: [3, 3, 3, 3, 3, 3, 3, 3, 3,
-                            3, 3, 3, 3, 3, 3, 3, 3, 3],
-                coursePar: 54,
-                notes: '18-hole Red/Short Layout'
-            }
+                           4, 4, 3, 3, 3, 3, 3, 3, 3],
+                coursePar: 56,
+                notes: '18-hole Red to White Layout'
+            },
+            {
+                id: 'blue-yellow-18',
+                name: 'Blue to Yellow 18  Hole Layout',
+                color: '#4444FF',
+                holePars: [3, 3, 3, 3, 4, 3, 3, 3, 3,
+                           3, 3, 3, 3, 3, 3, 3, 3, 3],
+                coursePar: 55,
+                notes: '18-hole Blue to Yellow Layout'
+            },
+            {
+                id: 'blue-yellow-20',
+                name: 'Blue to Yellow 20 Hole Layout',
+                color: '#4444FF',
+                holePars: [3, 3, 3, 3, 4, 3, 3, 3, 3,
+                           3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+                coursePar: 61,
+                notes: '20-hole Blue to Yellow Layout'
+            },
         ]
     },
 ];
