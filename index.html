@@ -57,6 +57,31 @@ body.mario-party-bg {
         linear-gradient(145deg, rgba(10, 30, 76, 0.64), rgba(11, 20, 48, 0.56)),
     url('assets/mario-party-bg.png') center center / cover no-repeat fixed;
 }
+body.disc-dice-bg {
+    background:
+        linear-gradient(145deg, rgba(7, 12, 26, 0.48), rgba(7, 12, 26, 0.26)),
+    url('assets/disc-dice-background.jpg') center center / cover no-repeat fixed;
+}
+body.simple-score-wolf-bg {
+    background-color: #0f1218;
+    background-image:
+        linear-gradient(145deg, rgba(12, 10, 7, 0.46), rgba(12, 10, 7, 0.24)),
+        url('assets/wolf.jpg');
+    background-position: center center, center center;
+    background-size: auto, contain;
+    background-repeat: no-repeat, no-repeat;
+    background-attachment: fixed, fixed;
+}
+body.simple-score-bingo-bg {
+    background-color: #0d1620;
+    background-image:
+        linear-gradient(145deg, rgba(7, 18, 24, 0.46), rgba(7, 18, 24, 0.24)),
+        url('assets/bingo-bango-bango.jpg');
+    background-position: center center, center center;
+    background-size: auto, contain;
+    background-repeat: no-repeat, no-repeat;
+    background-attachment: fixed, fixed;
+}
 .container {
     width: min(100%, 960px);
     position: relative;
@@ -187,6 +212,89 @@ select option:checked {
     width: min(100%, 560px);
     margin: 0 auto;
 }
+.dice-container {
+    width: min(100%, 560px);
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.dice-stage {
+    width: min(100%, 320px);
+    display: grid;
+    gap: 14px;
+    justify-items: center;
+}
+.dice-roll-button {
+    min-width: 190px;
+    padding: 14px 22px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.18);
+    background: linear-gradient(135deg, #ffd84d 0%, #ff9f1c 46%, #ff6b6b 100%);
+    color: #172038;
+    font-weight: 900;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    box-shadow: 0 18px 34px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.45);
+}
+.dice-roll-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 22px 40px rgba(0,0,0,0.34), inset 0 1px 0 rgba(255,255,255,0.5);
+}
+.dice-roll-button:active {
+    transform: scale(0.98);
+}
+.dice-face {
+    width: min(72vw, 240px);
+    aspect-ratio: 1;
+    border: 0;
+    border-radius: 28px;
+    background: linear-gradient(145deg, #ffffff 0%, #f2f6ff 45%, #dce7ff 100%);
+    box-shadow: 0 24px 42px rgba(0,0,0,0.28), inset 0 0 0 1px rgba(255,255,255,0.75);
+    display: grid;
+    place-items: center;
+    color: #1e2a38;
+    font-size: clamp(4rem, 14vw, 6rem);
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    cursor: pointer;
+    touch-action: manipulation;
+    transition: transform .16s ease, box-shadow .16s ease;
+    position: relative;
+}
+.dice-face::before {
+    content: '';
+    position: absolute;
+    inset: 14px;
+    border-radius: 20px;
+    border: 2px solid rgba(31, 57, 131, 0.09);
+}
+.dice-face:hover {
+    transform: translateY(-2px) scale(1.01);
+    box-shadow: 0 28px 48px rgba(0,0,0,0.32), inset 0 0 0 1px rgba(255,255,255,0.8);
+}
+.dice-face.rolling {
+    animation: diceWiggle .18s linear infinite;
+}
+@keyframes diceWiggle {
+    0% { transform: rotate(0deg) scale(1); }
+    25% { transform: rotate(-4deg) scale(1.01); }
+    50% { transform: rotate(4deg) scale(1.02); }
+    75% { transform: rotate(-2deg) scale(1.01); }
+    100% { transform: rotate(0deg) scale(1); }
+}
+body.mario-party-bg .dice-face {
+    background: linear-gradient(145deg, #ffffff 0%, #fff6f2 42%, #ffe2d9 100%);
+}
+body.mario-party-bg .dice-face::before {
+    border-color: rgba(217, 58, 47, 0.16);
+}
+body.disc-dice-bg .dice-face {
+    background: linear-gradient(145deg, #ffffff 0%, #edf2ff 45%, #cddcff 100%);
+}
+body.disc-dice-bg .dice-face::before {
+    border-color: rgba(72, 107, 255, 0.18);
+}
 canvas {
     width: 100%;
     max-width: 100%;
@@ -251,6 +359,26 @@ canvas {
 }
 .game-option-card p {
     margin-bottom: 12px;
+}
+.vertical-option-buttons {
+    display: grid;
+    gap: 10px;
+}
+.vertical-option-buttons .option-button {
+    width: 100%;
+    text-align: left;
+    font-weight: 700;
+}
+.vertical-option-buttons .option-button.active {
+    background: linear-gradient(135deg, #ffd84d 0%, #ff9f1c 46%, #ff6b6b 100%);
+    color: #172038;
+}
+.simple-entry-banner {
+    font-size: 1.02rem;
+    font-weight: 700;
+}
+.simple-score-editor {
+    margin-top: 14px;
 }
 #result, #holeCounter, #historyPanel, #scoreboard {
     margin-top: 14px;
@@ -534,6 +662,16 @@ body.light-mode .game-option-card {
                 <button class="main-button" onclick="chooseGame('mario-party')">Play Mario Party</button>
             </div>
             <div class="game-option-card">
+                <h3>Disc Dice</h3>
+                <p>Roll a six-sided die for every player at the start of each hole, then track scores against the summed par.</p>
+                <button class="main-button" onclick="chooseGame('disc-dice')">Play Disc Dice</button>
+            </div>
+            <div class="game-option-card">
+                <h3>Simple Score Card</h3>
+                <p>Pick a game entry, then track player scores with a clean scorecard view.</p>
+                <button class="main-button" onclick="chooseGame('simple-score-card')">Play Simple Score Card</button>
+            </div>
+            <div class="game-option-card">
                 <h3>Random Tee Box</h3>
                 <p>Jump into setup with tee boxes enabled and ready for randomized tee assignment.</p>
                 <button class="main-button" onclick="chooseGame('random-tee-box')">Play Random Tee Box</button>
@@ -583,6 +721,16 @@ body.light-mode .game-option-card {
                     <div class="name-list" id="teeBoxList" style="display:none;"></div>
                     <p style="margin-top:10px; color:#cfd8ff; font-size:0.95rem;">If enabled, each team will receive a random tee box after the spin.</p>
                 </div>
+                <div id="simpleScoreSetupPanel" class="hidden">
+                    <h3>Simple Score Card Entry</h3>
+                    <div id="simpleScoreButtons" class="vertical-option-buttons">
+                        <button type="button" class="button option-button" onclick="selectSimpleScoreEntry('Wolf')">Wolf</button>
+                        <button type="button" class="button option-button" onclick="selectSimpleScoreEntry('Bingo Bango Bongo')">Bingo Bango Bongo</button>
+                        <button type="button" class="button option-button" onclick="selectSimpleScoreEntry('Birdie or Die')">Birdie or Die</button>
+                        <button type="button" class="button option-button" onclick="selectSimpleScoreEntry('Skins')">Skins</button>
+                    </div>
+                    <p id="simpleScoreSelected" class="small-text" style="margin-top:10px;"></p>
+                </div>
             </div>
         </div>
         <label id="courseToggleRow" style="display:flex; align-items:center; gap:10px; margin:6px 0 12px;">
@@ -610,8 +758,8 @@ body.light-mode .game-option-card {
     <section id="wheelPage" class="page-panel hidden">
         <div class="panel-header">
             <div>
-                <h2>Spin Wheel</h2>
-                <p>Spin to select the next matchup or player order.</p>
+                <h2 id="playPageTitle">Spin Wheel</h2>
+                <p id="playPageDescription">Spin to select the next matchup or player order.</p>
             </div>
             <div class="header-controls">
                 <label class="theme-toggle">
@@ -621,6 +769,15 @@ body.light-mode .game-option-card {
                 <button class="button" onclick="resetToSetup()">Back to Setup</button>
                 <button class="button" onclick="resetGame()">Reset Scores</button>
             </div>
+        </div>
+        <div class="dice-container hidden" id="diceContainer">
+            <div class="dice-stage">
+                <button id="diceFace" class="button dice-roll-button" type="button" aria-label="Roll dice">Roll Dice</button>
+            </div>
+        </div>
+        <div id="simpleScoreContainer" class="hidden">
+            <div id="simpleEntryBanner" class="card simple-entry-banner"></div>
+            <div id="simpleScoreEditor" class="card simple-score-editor"></div>
         </div>
         <div class="wheel-container" id="wheelContainer">
             <div class="pointer"></div>
@@ -956,8 +1113,18 @@ let state = {
     coursePar: null,
     holePars: [],
     playerParDeltas: {},
+    playerParTotals: {},
+    currentHoleRolls: {},
+    simpleScoreEntry: 'Wolf',
     history: [],
     soloPlayerCounts: {}
+};
+const SIMPLE_SCORE_ENTRIES = ['Wolf', 'Bingo Bango Bongo', 'Birdie or Die', 'Skins'];
+const SIMPLE_SCORE_DESCRIPTIONS = {
+    'Wolf': "Each hole, one player is the Wolf who tees last. The Wolf watches each other player tee and may choose one teammate when they see a shot they like; once the next player up tees off, the previous shot is no longer an option for the Wolf to pick. If the Wolf gets to the end of the order and has not picked a partner, they are going solo. Win the hole solo and they earn double points. If they lose, everyone else earns a point. Rotate the Wolf each hole. Best with 4+ players.",
+    'Bingo Bango Bongo': "Three points are available on each hole:\n\n- Bingo - Longest drive off the tee\n- Bango - Closest to the pin after the approach\n- Bongo - First to hole out\n\nYou do not have to win the hole to score. Order of play matters; farthest out throws first and back of the box has an advantage off the tee.",
+    'Birdie or Die': "No traditional scoring. You only earn points for birdies (1 point) and eagles (3 points). Par, bogey, snowman, are all worth the same... zero.",
+    'Skins': "Each hole is worth one skin (or point). To win a skin, you must win the hole outright. If two or more players tie, the skin rolls over to the next hole. Play for bragging rights or add stakes."
 };
 const nameListDiv = document.getElementById('nameList');
 const wheelCanvas = document.getElementById('wheel');
@@ -968,11 +1135,283 @@ let currentRotation = 0;
 let spinUsed = false;
 let teamsNeedingScore = 0;
 let teamsScoredCount = 0;
+let nextHoleTimer = null;
+
+function clearNextHoleTimer() {
+    if (nextHoleTimer !== null) {
+        clearTimeout(nextHoleTimer);
+        nextHoleTimer = null;
+    }
+}
 
 function updateWheelCursor() {
     wheelCanvas.style.cursor = spinUsed ? 'not-allowed' : 'pointer';
     const hint = document.getElementById('wheelHint');
-    if (hint) hint.textContent = spinUsed ? 'Enter all scores to reveal the wheel' : 'Tap the wheel to spin';
+    if (hint) {
+        if (isDiscDiceGame()) {
+            hint.textContent = 'Tap Roll Dice to start the next hole.';
+        } else {
+            hint.textContent = spinUsed ? 'Enter all scores to reveal the wheel' : 'Tap the wheel to spin';
+        }
+    }
+}
+
+function isDiscDiceGame() {
+    return state.selectedGame === 'disc-dice';
+}
+
+function isSimpleScoreCardGame() {
+    return state.selectedGame === 'simple-score-card';
+}
+
+function applyGameBackground() {
+    document.body.classList.toggle('mario-party-bg', state.selectedGame === 'mario-party');
+    document.body.classList.toggle('disc-dice-bg', state.selectedGame === 'disc-dice');
+    document.body.classList.toggle(
+        'simple-score-wolf-bg',
+        isSimpleScoreCardGame() && state.simpleScoreEntry === 'Wolf'
+    );
+    document.body.classList.toggle(
+        'simple-score-bingo-bg',
+        isSimpleScoreCardGame() && state.simpleScoreEntry === 'Bingo Bango Bongo'
+    );
+}
+
+function updatePlayPageModeUI() {
+    const title = document.getElementById('playPageTitle');
+    const description = document.getElementById('playPageDescription');
+    const wheelContainer = document.getElementById('wheelContainer');
+    const diceContainer = document.getElementById('diceContainer');
+    const simpleScoreContainer = document.getElementById('simpleScoreContainer');
+    const wheelHint = document.getElementById('wheelHint');
+    applyGameBackground();
+    if (isDiscDiceGame()) {
+        if (title) title.textContent = 'Disc Dice';
+        if (description) description.textContent = 'Roll a die for every player at the start of each hole.';
+        if (wheelContainer) wheelContainer.classList.add('hidden');
+        if (diceContainer) diceContainer.classList.remove('hidden');
+        if (simpleScoreContainer) simpleScoreContainer.classList.add('hidden');
+        if (wheelHint) wheelHint.textContent = 'Tap the die to roll the next hole.';
+    } else if (isSimpleScoreCardGame()) {
+        if (title) title.textContent = 'Simple Score Card';
+        if (description) description.textContent = 'Track scores by player with the selected game entry.';
+        if (wheelContainer) wheelContainer.classList.add('hidden');
+        if (diceContainer) diceContainer.classList.add('hidden');
+        if (simpleScoreContainer) simpleScoreContainer.classList.remove('hidden');
+        if (wheelHint) wheelHint.textContent = 'Enter scores for each player below.';
+    } else {
+        if (title) title.textContent = 'Spin Wheel';
+        if (description) description.textContent = 'Spin to select the next matchup or player order.';
+        if (wheelContainer) wheelContainer.classList.remove('hidden');
+        if (diceContainer) diceContainer.classList.add('hidden');
+        if (simpleScoreContainer) simpleScoreContainer.classList.add('hidden');
+        if (wheelHint) wheelHint.textContent = 'Tap the wheel to spin';
+    }
+    syncDiscDiceControls();
+}
+
+function getSimpleScoreDescriptionHtml(entry) {
+    const description = SIMPLE_SCORE_DESCRIPTIONS[entry] || '';
+    return description
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/\n\n/g, '<br><br>')
+        .replace(/\n- /g, '<br>- ');
+}
+
+function renderSimpleScoreButtons() {
+    const buttonsHost = document.getElementById('simpleScoreButtons');
+    const selectedText = document.getElementById('simpleScoreSelected');
+    if (!buttonsHost || !selectedText) return;
+    const buttons = buttonsHost.querySelectorAll('button.option-button');
+    buttons.forEach(btn => {
+        const isActive = btn.textContent.trim() === state.simpleScoreEntry;
+        btn.classList.toggle('active', isActive);
+    });
+    const descriptionHtml = getSimpleScoreDescriptionHtml(state.simpleScoreEntry);
+    selectedText.innerHTML = `<strong>Selected entry:</strong> ${state.simpleScoreEntry}<br><br>${descriptionHtml}`;
+}
+
+function selectSimpleScoreEntry(entry) {
+    if (!SIMPLE_SCORE_ENTRIES.includes(entry)) return;
+    state.simpleScoreEntry = entry;
+    applyGameBackground();
+    renderSimpleScoreButtons();
+    if (!document.getElementById('wheelPage').classList.contains('hidden') && isSimpleScoreCardGame()) {
+        renderSimpleScoreCardPlay();
+    }
+    saveState();
+}
+
+function updateSimpleScore(player, delta, valueEl) {
+    const next = Math.max(0, (state.playerScores[player] || 0) + delta);
+    state.playerScores[player] = next;
+    valueEl.textContent = String(next);
+    renderScoreboard();
+    saveState();
+}
+
+function renderSimpleScoreCardPlay() {
+    const banner = document.getElementById('simpleEntryBanner');
+    const editor = document.getElementById('simpleScoreEditor');
+    if (!banner || !editor) return;
+    const descriptionHtml = getSimpleScoreDescriptionHtml(state.simpleScoreEntry);
+    banner.innerHTML = `<strong>Selected entry:</strong> ${state.simpleScoreEntry}<br><br>${descriptionHtml}`;
+    editor.innerHTML = '';
+
+    const cards = document.createElement('div');
+    cards.className = 'team-cards';
+    state.selectedPlayers.forEach(player => {
+        const card = document.createElement('div');
+        card.className = 'team-card';
+
+        const header = document.createElement('div');
+        header.className = 'team-card-header';
+        header.textContent = player;
+
+        const subtitle = document.createElement('div');
+        subtitle.className = 'team-card-subtitle';
+        subtitle.textContent = 'Adjust player score';
+
+        const controls = document.createElement('div');
+        controls.className = 'team-controls';
+        const minus = document.createElement('button');
+        minus.textContent = '➖';
+        const plus = document.createElement('button');
+        plus.textContent = '➕';
+        const counter = document.createElement('span');
+        counter.className = 'team-counter';
+        counter.textContent = String(state.playerScores[player] || 0);
+        minus.onclick = () => updateSimpleScore(player, -1, counter);
+        plus.onclick = () => updateSimpleScore(player, 1, counter);
+        controls.append(minus, counter, plus);
+
+        card.append(header, subtitle, controls);
+        cards.appendChild(card);
+    });
+
+    editor.appendChild(cards);
+}
+
+function syncDiscDiceControls() {
+    const diceFace = document.getElementById('diceFace');
+    if (!diceFace) return;
+    diceFace.disabled = !isDiscDiceGame();
+    if (isDiscDiceGame()) {
+        diceFace.textContent = 'Roll Dice';
+    }
+    diceFace.style.cursor = diceFace.disabled ? 'not-allowed' : 'pointer';
+}
+
+function renderDiscDiceRound() {
+    const resultDiv = document.getElementById('result');
+    resultDiv.innerHTML = '';
+    const intro = document.createElement('div');
+    intro.style.marginBottom = '12px';
+    intro.innerHTML = `<strong>Hole ${state.holeNumber}</strong> - each player's dice roll becomes their par for the hole.`;
+    resultDiv.appendChild(intro);
+
+    const cards = document.createElement('div');
+    cards.className = 'team-cards';
+    state.selectedPlayers.forEach(player => {
+        const roll = state.currentHoleRolls[player] || 1;
+        const totalPar = state.playerParTotals[player] || 0;
+        const card = document.createElement('div');
+        card.className = 'team-card';
+        card.dataset.player = player;
+
+        const header = document.createElement('div');
+        header.className = 'team-card-header';
+        header.textContent = player;
+
+        const rollFace = document.createElement('div');
+        rollFace.className = 'dice-face';
+        rollFace.textContent = String(roll);
+
+        const subtitle = document.createElement('div');
+        subtitle.className = 'team-card-subtitle';
+        subtitle.innerHTML = `Dice roll: <strong>${roll}</strong><br>Par total: <strong>${totalPar}</strong>`;
+
+        const controls = document.createElement('div');
+        controls.className = 'team-controls';
+        const minus = document.createElement('button');
+        minus.textContent = '➖';
+        const plus = document.createElement('button');
+        plus.textContent = '➕';
+        const counter = document.createElement('span');
+        counter.className = 'team-counter';
+        counter.textContent = '0';
+        counter._scored = false;
+        minus.onclick = () => updateTeamScore([player], -1, counter);
+        plus.onclick = () => updateTeamScore([player], 1, counter);
+        controls.append(minus, counter, plus);
+
+        card.append(header, rollFace, subtitle, controls);
+        cards.appendChild(card);
+    });
+
+    resultDiv.appendChild(cards);
+    resultDiv.classList.remove('hidden');
+    document.getElementById('holeCounter').textContent = `Hole ${state.holeNumber}`;
+    document.getElementById('holeCounter').classList.remove('hidden');
+    renderScoreboard();
+    renderHistory();
+    syncDiscDiceControls();
+}
+
+function animateDiscDiceRolls() {
+    const cards = Array.from(document.querySelectorAll('#result .team-card[data-player]'));
+    if (!cards.length) return;
+
+    const animationLength = 1100;
+    const tickLength = 90;
+    const startTime = Date.now();
+
+    const timer = setInterval(() => {
+        const elapsed = Date.now() - startTime;
+        const isRolling = elapsed < animationLength;
+
+        cards.forEach(card => {
+            const player = card.dataset.player;
+            const rollFace = card.querySelector('.dice-face');
+            const subtitle = card.querySelector('.team-card-subtitle');
+            if (!rollFace || !subtitle) return;
+
+            if (isRolling) {
+                rollFace.classList.add('rolling');
+                rollFace.textContent = String(Math.floor(Math.random() * 6) + 1);
+                subtitle.innerHTML = `Rolling...<br>Par total: <strong>${state.playerParTotals[player] || 0}</strong>`;
+            } else {
+                const finalRoll = state.currentHoleRolls[player] || 1;
+                rollFace.classList.remove('rolling');
+                rollFace.textContent = String(finalRoll);
+                subtitle.innerHTML = `Dice roll: <strong>${finalRoll}</strong><br>Par total: <strong>${state.playerParTotals[player] || 0}</strong>`;
+            }
+        });
+
+        if (!isRolling) {
+            clearInterval(timer);
+        }
+    }, tickLength);
+}
+
+function rollDiscDiceHole() {
+    if (!isDiscDiceGame()) return;
+    if (!state.selectedPlayers.length) {
+        alert('Please select at least 1 player.');
+        return;
+    }
+    const nextHole = state.holeNumber + 1;
+    state.holeNumber = nextHole;
+    state.currentHoleRolls = {};
+    state.selectedPlayers.forEach(player => {
+        const roll = Math.floor(Math.random() * 6) + 1;
+        state.currentHoleRolls[player] = roll;
+    });
+    renderDiscDiceRound();
+    animateDiscDiceRolls();
+    saveState();
 }
 
 function showScoreEntry() {
@@ -1028,13 +1467,13 @@ function updateSetupGameSummary() {
     if (!summary) return;
     if (state.selectedGame === 'random-tee-box') {
         summary.textContent = 'Random Tee Box setup. Spin for individual players (no teams) with random tee assignments.';
+    } else if (isDiscDiceGame()) {
+        summary.textContent = 'Disc Dice setup. Select players, then roll a six-sided die for each player every hole.';
+    } else if (isSimpleScoreCardGame()) {
+        summary.textContent = 'Simple Score Card setup. Select players and pick a game entry.';
     } else {
         summary.textContent = 'Mario Party setup. Choose players, then hit start.';
     }
-}
-
-function applyGameBackground() {
-    document.body.classList.toggle('mario-party-bg', state.selectedGame === 'mario-party');
 }
 
 function isRandomTeeBoxGame() {
@@ -1053,6 +1492,23 @@ function chooseGame(gameType) {
         document.getElementById('enableCourseSelector').checked = false;
         state.teeBoxesEnabled = true;
         state.gameMode = 'order';
+    } else if (gameType === 'disc-dice') {
+        state.teeBoxes = [];
+        state.teeBoxesEnabled = false;
+        state.selectedPlayers = [];
+        document.getElementById('enableTeeBoxes').checked = false;
+        document.getElementById('enableCourseSelector').checked = false;
+        state.showCourseSelectorEnabled = false;
+        state.gameMode = 'disc-dice';
+    } else if (gameType === 'simple-score-card') {
+        state.teeBoxes = [];
+        state.teeBoxesEnabled = false;
+        state.selectedPlayers = [];
+        document.getElementById('enableTeeBoxes').checked = false;
+        document.getElementById('enableCourseSelector').checked = false;
+        state.showCourseSelectorEnabled = false;
+        state.simpleScoreEntry = state.simpleScoreEntry || SIMPLE_SCORE_ENTRIES[0];
+        state.gameMode = 'simple-score-card';
     } else {
         state.teeBoxes = [];
         state.teeBoxesEnabled = false;
@@ -1060,6 +1516,7 @@ function chooseGame(gameType) {
         state.gameMode = 'team';
     }
     renderNameList();
+    renderSimpleScoreButtons();
     renderTeeBoxList();
     updatePlayersPanelForGame();
     updateTeeBoxPanelForGame();
@@ -1095,6 +1552,15 @@ function loadSavedState() {
     if (!state.playerParDeltas || typeof state.playerParDeltas !== 'object') {
         state.playerParDeltas = {};
     }
+    if (!state.playerParTotals || typeof state.playerParTotals !== 'object') {
+        state.playerParTotals = {};
+    }
+    if (!state.currentHoleRolls || typeof state.currentHoleRolls !== 'object') {
+        state.currentHoleRolls = {};
+    }
+    if (!SIMPLE_SCORE_ENTRIES.includes(state.simpleScoreEntry)) {
+        state.simpleScoreEntry = SIMPLE_SCORE_ENTRIES[0];
+    }
     if (!Array.isArray(state.teeBoxes)) {
         state.teeBoxes = [];
     }
@@ -1102,6 +1568,12 @@ function loadSavedState() {
         state.teeBoxes = [...DEFAULT_RANDOM_TEE_BOXES];
         state.teeBoxesEnabled = true;
         state.gameMode = 'order';
+    } else if (isDiscDiceGame()) {
+        state.teeBoxesEnabled = false;
+        state.gameMode = 'disc-dice';
+    } else if (isSimpleScoreCardGame()) {
+        state.teeBoxesEnabled = false;
+        state.gameMode = 'simple-score-card';
     } else {
         state.gameMode = 'team';
     }
@@ -1109,6 +1581,7 @@ function loadSavedState() {
     names = Array.from(new Set([...names, ...state.selectedPlayers]));
     saveNames();
     renderNameList();
+    renderSimpleScoreButtons();
     document.getElementById('enableAddPlayers').checked = state.addPlayersEnabled;
     document.getElementById('enableCourseSelector').checked = state.showCourseSelectorEnabled;
     updatePlayersPanelForGame();
@@ -1123,7 +1596,17 @@ function loadSavedState() {
     document.getElementById('setupPage').classList.add('hidden');
     document.getElementById('wheelPage').classList.remove('hidden');
     setBannerForSetupPage(false);
-    drawWheel();
+    updatePlayPageModeUI();
+    if (!isDiscDiceGame()) {
+        if (!isSimpleScoreCardGame()) {
+            drawWheel();
+        }
+    } else if (state.holeNumber > 0 && Object.keys(state.currentHoleRolls || {}).length) {
+        renderDiscDiceRound();
+    }
+    if (isSimpleScoreCardGame()) {
+        renderSimpleScoreCardPlay();
+    }
     renderScoreboard();
     renderHistory();
 }
@@ -1301,8 +1784,8 @@ function addName() {
 function updateSetupStats() {
     const selected = Array.from(nameListDiv.querySelectorAll('input:checked')).map(cb => cb.value);
     state.selectedPlayers = selected;
-    state.gameMode = isRandomTeeBoxGame() ? 'order' : 'team';
-    state.teeBoxesEnabled = isRandomTeeBoxGame() ? true : document.getElementById('enableTeeBoxes').checked;
+    state.gameMode = isRandomTeeBoxGame() ? 'order' : isDiscDiceGame() ? 'disc-dice' : isSimpleScoreCardGame() ? 'simple-score-card' : 'team';
+    state.teeBoxesEnabled = isRandomTeeBoxGame() ? true : (isDiscDiceGame() || isSimpleScoreCardGame()) ? false : document.getElementById('enableTeeBoxes').checked;
 }
 
 function togglePlayersPanel() {
@@ -1317,17 +1800,23 @@ function updatePlayersPanelForGame() {
     const toggleRow = document.getElementById('playersToggleRow');
     const toggle = document.getElementById('enableAddPlayers');
     const isRandomGame = isRandomTeeBoxGame();
+    const isDiceGame = isDiscDiceGame();
     toggleRow.style.display = isRandomGame ? 'flex' : 'none';
     if (!isRandomGame) {
         toggle.checked = true;
     }
     togglePlayersPanel();
+    const playersPanel = document.getElementById('playersPanel');
+    if (playersPanel && isDiceGame) {
+        playersPanel.style.display = 'block';
+        state.addPlayersEnabled = true;
+    }
 }
 
 function toggleCoursePanel() {
     const enabled = document.getElementById('enableCourseSelector').checked;
     const coursePanel = document.getElementById('courseSelectorPanel');
-    const shouldShow = !isRandomTeeBoxGame() ? true : enabled;
+    const shouldShow = (isDiscDiceGame() || isSimpleScoreCardGame()) ? false : (!isRandomTeeBoxGame() ? true : enabled);
     coursePanel.style.display = shouldShow ? 'block' : 'none';
     state.showCourseSelectorEnabled = shouldShow;
 }
@@ -1335,9 +1824,16 @@ function toggleCoursePanel() {
 function updateCoursePanelForGame() {
     const toggleRow = document.getElementById('courseToggleRow');
     const toggle = document.getElementById('enableCourseSelector');
+    const coursePanel = document.getElementById('courseSelectorPanel');
     const isRandomGame = isRandomTeeBoxGame();
-    toggleRow.style.display = isRandomGame ? 'flex' : 'none';
-    if (!isRandomGame) {
+    const showCourseControls = isRandomGame;
+    toggleRow.style.display = showCourseControls ? 'flex' : 'none';
+    if (coursePanel) {
+        coursePanel.style.display = showCourseControls ? 'block' : 'none';
+    }
+    if (isDiscDiceGame() || isSimpleScoreCardGame()) {
+        toggle.checked = false;
+    } else if (!showCourseControls) {
         toggle.checked = true;
     }
     toggleCoursePanel();
@@ -1387,12 +1883,26 @@ function toggleTeeBoxInputs() {
 function updateTeeBoxPanelForGame() {
     const toggleRow = document.getElementById('teeBoxToggleRow');
     const alwaysOnNote = document.getElementById('teeBoxAlwaysOnNote');
+    const teeBoxPanel = document.getElementById('teeBoxPanel');
+    const simpleScorePanel = document.getElementById('simpleScoreSetupPanel');
     const isRandomGame = isRandomTeeBoxGame();
-    toggleRow.style.display = isRandomGame ? 'none' : 'flex';
+    const isDiceGame = isDiscDiceGame();
+    const isSimpleGame = isSimpleScoreCardGame();
+    const showTeeBoxControls = !isDiceGame && !isSimpleGame;
+    toggleRow.style.display = showTeeBoxControls ? 'flex' : 'none';
+    if (teeBoxPanel) {
+        teeBoxPanel.style.display = showTeeBoxControls ? 'block' : 'none';
+    }
+    if (simpleScorePanel) {
+        simpleScorePanel.classList.toggle('hidden', !isSimpleGame);
+    }
     alwaysOnNote.classList.toggle('hidden', !isRandomGame);
     if (isRandomGame) {
         document.getElementById('enableTeeBoxes').checked = true;
         state.teeBoxesEnabled = true;
+    } else if (isDiceGame || isSimpleGame) {
+        document.getElementById('enableTeeBoxes').checked = false;
+        state.teeBoxesEnabled = false;
     }
     toggleTeeBoxInputs();
 }
@@ -1423,11 +1933,21 @@ function startGame() {
             alert('Please add at least 1 player.');
             return;
         }
+    } else if (isDiscDiceGame()) {
+        if (!state.selectedPlayers.length) {
+            alert('Please select at least 1 player.');
+            return;
+        }
+    } else if (isSimpleScoreCardGame()) {
+        if (!state.selectedPlayers.length) {
+            alert('Please select at least 1 player.');
+            return;
+        }
     } else if (state.selectedPlayers.length < 2) {
         alert('Please select at least 2 players.');
         return;
     }
-    state.teeBoxesEnabled = isRandomTeeBoxGame() ? true : document.getElementById('enableTeeBoxes').checked;
+    state.teeBoxesEnabled = isRandomTeeBoxGame() ? true : isSimpleScoreCardGame() ? false : document.getElementById('enableTeeBoxes').checked;
     if (state.teeBoxesEnabled && !state.teeBoxes.length && !isRandomTeeBoxGame()) {
         alert('Please add at least one tee box option.');
         return;
@@ -1436,21 +1956,33 @@ function startGame() {
     state.selectedPlayers.forEach(name => state.playerScores[name] = 0);
     state.playerParDeltas = {};
     state.selectedPlayers.forEach(name => state.playerParDeltas[name] = 0);
+    state.playerParTotals = {};
+    state.selectedPlayers.forEach(name => state.playerParTotals[name] = 0);
+    state.currentHoleRolls = {};
     state.holeNumber = 0;
     state.history = [];
-    state.wheelEntries = buildWheelEntries();
-    if (!state.wheelEntries.length) {
-        alert('Unable to generate wheel entries. Adjust selected players and try again.');
-        return;
-    }
-    state.gameMode = isRandomTeeBoxGame() ? 'order' : 'team';
+    state.gameMode = isRandomTeeBoxGame() ? 'order' : isDiscDiceGame() ? 'disc-dice' : isSimpleScoreCardGame() ? 'simple-score-card' : 'team';
     saveState();
-    drawWheel();
     document.getElementById('setupPage').classList.add('hidden');
     document.getElementById('wheelPage').classList.remove('hidden');
     setBannerForSetupPage(false);
-    renderScoreboard();
-    renderHistory();
+    updatePlayPageModeUI();
+    if (isDiscDiceGame()) {
+        rollDiscDiceHole();
+    } else if (isSimpleScoreCardGame()) {
+        renderSimpleScoreCardPlay();
+        renderScoreboard();
+        renderHistory();
+    } else {
+        state.wheelEntries = buildWheelEntries();
+        if (!state.wheelEntries.length) {
+            alert('Unable to generate wheel entries. Adjust selected players and try again.');
+            return;
+        }
+        drawWheel();
+        renderScoreboard();
+        renderHistory();
+    }
 }
 
 function buildWheelEntries() {
@@ -1826,16 +2358,26 @@ function updateTeamScore(team, delta, counter) {
     if (!counter._scored) {
         counter._scored = true;
         teamsScoredCount++;
+        if (isDiscDiceGame()) {
+            team.forEach(player => {
+                const roll = state.currentHoleRolls[player] || 0;
+                state.playerParTotals[player] = (state.playerParTotals[player] || 0) + roll;
+            });
+        }
     }
     team.forEach(player => {
         state.playerScores[player] = Math.max(0, (state.playerScores[player] || 0) + delta);
     });
     if (teamsNeedingScore > 0 && teamsScoredCount >= teamsNeedingScore) {
-        spinUsed = false;
-        setTimeout(() => {
-            document.getElementById('wheelContainer').classList.remove('hidden');
-            updateWheelCursor();
-        }, 3000);
+        if (isDiscDiceGame()) {
+            syncDiscDiceControls();
+        } else {
+            spinUsed = false;
+            setTimeout(() => {
+                document.getElementById('wheelContainer').classList.remove('hidden');
+                updateWheelCursor();
+            }, 3000);
+        }
     }
     renderScoreboard();
 }
@@ -1918,11 +2460,16 @@ function renderScoreboard() {
         const score = document.createElement('span');
         const scoreValue = state.playerScores[player] || 0;
         let parDelta = state.playerParDeltas[player] ?? 0;
-        if (isFinalHoleInProgress()) {
-            const runningPar = getRunningParIncludingCurrentHole();
-            parDelta = scoreValue - runningPar;
+        if (isDiscDiceGame()) {
+            parDelta = scoreValue - (state.playerParTotals[player] || 0);
+            score.textContent = `${scoreValue} (${parDelta > 0 ? '+' : ''}${parDelta})`;
+        } else {
+            if (isFinalHoleInProgress()) {
+                const runningPar = getRunningParIncludingCurrentHole();
+                parDelta = scoreValue - runningPar;
+            }
+            score.textContent = formatScoreWithParDelta(scoreValue, parDelta);
         }
-        score.textContent = formatScoreWithParDelta(scoreValue, parDelta);
         row.append(name, score);
         container.appendChild(row);
     });
@@ -1952,25 +2499,35 @@ function renderHistory() {
 }
 
 function resetToSetup() {
+    clearNextHoleTimer();
+    state.currentHoleRolls = {};
+    state.wheelEntries = [];
     document.getElementById('wheelPage').classList.add('hidden');
     document.getElementById('setupPage').classList.remove('hidden');
-    state.gameMode = isRandomTeeBoxGame() ? 'order' : 'team';
+    document.getElementById('gameSelectPage').classList.add('hidden');
+    state.gameMode = isRandomTeeBoxGame() ? 'order' : isDiscDiceGame() ? 'disc-dice' : isSimpleScoreCardGame() ? 'simple-score-card' : 'team';
     updatePlayersPanelForGame();
     updateTeeBoxPanelForGame();
     updateCoursePanelForGame();
     setBannerForSetupPage(false);
     document.getElementById('result').classList.add('hidden');
     document.getElementById('holeCounter').classList.add('hidden');
+    document.getElementById('scoreboard').classList.add('hidden');
+    document.getElementById('historyPanel').classList.add('hidden');
     spinUsed = false;
     teamsNeedingScore = 0;
     teamsScoredCount = 0;
-    document.getElementById('wheelContainer').classList.remove('hidden');
+    updatePlayPageModeUI();
     updateWheelCursor();
+    saveState();
 }
 
 function resetGame() {
+    clearNextHoleTimer();
     state.playerScores = {};
     state.playerParDeltas = {};
+    state.playerParTotals = {};
+    state.currentHoleRolls = {};
     state.holeNumber = 0;
     state.history = [];
     state.soloPlayerCounts = {};
@@ -1978,12 +2535,26 @@ function resetGame() {
     spinUsed = false;
     teamsNeedingScore = 0;
     teamsScoredCount = 0;
-    document.getElementById('wheelContainer').classList.remove('hidden');
-    updateWheelCursor();
     document.getElementById('result').classList.add('hidden');
     document.getElementById('holeCounter').classList.add('hidden');
     document.getElementById('historyPanel').classList.add('hidden');
     document.getElementById('scoreboard').classList.add('hidden');
+    if (isDiscDiceGame()) {
+        updatePlayPageModeUI();
+        syncDiscDiceControls();
+    } else if (isSimpleScoreCardGame()) {
+        updatePlayPageModeUI();
+        renderSimpleScoreCardPlay();
+    } else {
+        document.getElementById('wheelContainer').classList.remove('hidden');
+        updateWheelCursor();
+        state.wheelEntries = buildWheelEntries();
+        if (state.wheelEntries.length) {
+            drawWheel();
+        }
+    }
+    renderScoreboard();
+    renderHistory();
     saveState();
     alert('Game reset. Start a new spin to continue.');
 }
@@ -2006,14 +2577,21 @@ function init() {
     document.getElementById('enableCourseSelector').checked = state.showCourseSelectorEnabled;
     updatePlayersPanelForGame();
     renderNameList();
+    renderSimpleScoreButtons();
     updateSetupGameSummary();
     updateTeeBoxPanelForGame();
     updateCoursePanelForGame();
     renderCourseSelector();
     renderSelectedCourse();
     applyGameBackground();
+    updatePlayPageModeUI();
     wheelCanvas.addEventListener('click', spinWheel);
     wheelCanvas.addEventListener('touchend', function(e) { e.preventDefault(); spinWheel(); }, { passive: false });
+    const diceFace = document.getElementById('diceFace');
+    if (diceFace) {
+        diceFace.addEventListener('click', rollDiscDiceHole);
+        diceFace.addEventListener('touchend', function(e) { e.preventDefault(); rollDiscDiceHole(); }, { passive: false });
+    }
 }
 
 init();

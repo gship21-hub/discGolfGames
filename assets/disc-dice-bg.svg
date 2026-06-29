@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="192" y1="0" x2="1760" y2="1080" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#091225"/>
+      <stop offset="0.48" stop-color="#13295A"/>
+      <stop offset="1" stop-color="#050812"/>
+    </linearGradient>
+    <radialGradient id="glowA" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(420 220) rotate(90) scale(250 290)">
+      <stop stop-color="#FFDE66" stop-opacity="0.34"/>
+      <stop offset="1" stop-color="#FFDE66" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowB" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1530 820) rotate(90) scale(300 330)">
+      <stop stop-color="#6CD7FF" stop-opacity="0.28"/>
+      <stop offset="1" stop-color="#6CD7FF" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="dieFace" x1="760" y1="220" x2="1160" y2="620" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#DCE7FF"/>
+    </linearGradient>
+    <linearGradient id="dieFaceAlt" x1="260" y1="580" x2="640" y2="980" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFF8E6"/>
+      <stop offset="1" stop-color="#D5E5FF"/>
+    </linearGradient>
+    <filter id="shadow" x="0" y="0" width="1920" height="1080" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#000000" flood-opacity="0.32"/>
+    </filter>
+  </defs>
+
+  <rect width="1920" height="1080" fill="url(#bg)"/>
+  <rect width="1920" height="1080" fill="url(#glowA)"/>
+  <rect width="1920" height="1080" fill="url(#glowB)"/>
+
+  <g opacity="0.22">
+    <circle cx="140" cy="160" r="4" fill="#FFFFFF"/>
+    <circle cx="220" cy="250" r="3" fill="#FFFFFF"/>
+    <circle cx="290" cy="130" r="5" fill="#FFFFFF"/>
+    <circle cx="1660" cy="160" r="4" fill="#FFFFFF"/>
+    <circle cx="1760" cy="240" r="3" fill="#FFFFFF"/>
+    <circle cx="1600" cy="300" r="5" fill="#FFFFFF"/>
+    <circle cx="1480" cy="960" r="4" fill="#FFFFFF"/>
+    <circle cx="1700" cy="880" r="3" fill="#FFFFFF"/>
+    <circle cx="1800" cy="980" r="5" fill="#FFFFFF"/>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="640" y="180" width="430" height="430" rx="54" transform="rotate(12 640 180)" fill="url(#dieFace)" stroke="#F1F6FF" stroke-opacity="0.9" stroke-width="6"/>
+    <circle cx="780" cy="310" r="24" fill="#24335F"/>
+    <circle cx="930" cy="310" r="24" fill="#24335F"/>
+    <circle cx="855" cy="385" r="24" fill="#24335F"/>
+    <circle cx="780" cy="460" r="24" fill="#24335F"/>
+    <circle cx="930" cy="460" r="24" fill="#24335F"/>
+    <circle cx="780" cy="535" r="24" fill="#24335F"/>
+    <circle cx="930" cy="535" r="24" fill="#24335F"/>
+
+    <rect x="250" y="560" width="360" height="360" rx="48" transform="rotate(-18 250 560)" fill="url(#dieFaceAlt)" stroke="#FFFFFF" stroke-opacity="0.85" stroke-width="5"/>
+    <circle cx="350" cy="660" r="20" fill="#24335F"/>
+    <circle cx="510" cy="660" r="20" fill="#24335F"/>
+    <circle cx="430" cy="740" r="20" fill="#24335F"/>
+    <circle cx="350" cy="820" r="20" fill="#24335F"/>
+    <circle cx="510" cy="820" r="20" fill="#24335F"/>
+
+    <rect x="1280" y="560" width="320" height="320" rx="42" transform="rotate(18 1280 560)" fill="#F8FBFF" fill-opacity="0.88" stroke="#DDE8FF" stroke-width="5"/>
+    <circle cx="1365" cy="650" r="18" fill="#24335F"/>
+    <circle cx="1515" cy="650" r="18" fill="#24335F"/>
+    <circle cx="1440" cy="725" r="18" fill="#24335F"/>
+  </g>
+
+  <g opacity="0.16">
+    <path d="M0 920C260 870 420 1010 650 965C860 925 1000 780 1240 810C1490 840 1640 1020 1920 960V1080H0V920Z" fill="#8EDBFF"/>
+    <path d="M0 120C240 160 410 30 620 70C825 110 960 250 1210 220C1490 185 1620 30 1920 110V0H0V120Z" fill="#FFD96A"/>
+  </g>
+</svg>
